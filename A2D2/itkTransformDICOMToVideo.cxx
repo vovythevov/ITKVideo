@@ -59,6 +59,5 @@ int main (int argv, char **argc)
   VideoWriter->EndVideo();
 
   std::cout<<"Done !"<<std::endl;
-  std::cin>>i;
   return EXIT_SUCCESS;
 }

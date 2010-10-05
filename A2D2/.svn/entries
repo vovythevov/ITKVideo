@@ -1,14 +1,14 @@
 10
 
 dir
-4
+9
 https://vovythevov.googlecode.com/svn/trunk
 https://vovythevov.googlecode.com/svn
 
 
 
-2010-10-01T19:15:54.278109Z
-4
+2010-10-04T20:48:28.750664Z
+9
 johan.andruejol
 has-props
 
@@ -28,7 +28,7 @@ has-props
 
 itkLightVideoFileReader.h
 file
-7
+
 
 
 
@@ -62,7 +62,7 @@ johan.andruejol
 
 itkFaceDetectionFilter.h
 file
-3
+
 
 
 
@@ -96,7 +96,7 @@ johan.andruejol
 
 itkVideoFileWriter.h
 file
-3
+
 
 
 
@@ -130,7 +130,7 @@ johan.andruejol
 
 itkVideoFileReaderTest.cxx
 file
-7
+
 
 
 
@@ -164,7 +164,7 @@ johan.andruejol
 
 itkVideoFileReader.txx
 file
-7
+
 
 
 
@@ -198,7 +198,7 @@ johan.andruejol
 
 itkVideoFileReader.h
 file
-7
+
 
 
 
@@ -232,14 +232,14 @@ johan.andruejol
 
 itkMotionTrackerTest.cxx
 file
-8
+10
 
 
 
-2010-10-04T19:10:14.458000Z
-7b1882f27d9ae449da39b03503c13f12
-2010-10-04T19:30:00.322957Z
-8
+2010-10-04T20:46:32.246000Z
+d7d05357ac7bde41f815a6a92283f9b5
+2010-10-05T14:32:41.373320Z
+10
 johan.andruejol
 
 
@@ -262,11 +262,23 @@ johan.andruejol
 
 
 
-3054
+1526
+
+itkTransformDICOMToVideo.cxx
+file
+10
+
+
+
+
+ceb7b21de4d3e3388f803e62c7aff7e4
+2010-10-04T20:48:28.750664Z
+9
+johan.andruejol
 
 itkLightVideoFileReader.txx
 file
-8
+
 
 
 
@@ -300,7 +312,7 @@ johan.andruejol
 
 itkFaceDetectionFilterTest.cxx
 file
-3
+
 
 
 
@@ -334,14 +346,14 @@ johan.andruejol
 
 CMakeLists.txt
 file
-7
+13
 
 
 
-2010-10-04T12:37:50.224000Z
-d3ef2803678555e4b5acd6050ee4f10e
-2010-10-04T15:52:53.438672Z
-7
+2010-10-05T14:58:33.173251Z
+505aa100f980e50fcb07fa2b683819b4
+2010-10-05T14:59:14.447294Z
+13
 johan.andruejol
 
 
@@ -364,11 +376,11 @@ johan.andruejol
 
 
 
-833
+1103
 
 itkFaceDetectionFilter.txx
 file
-3
+
 
 
 
@@ -402,14 +414,14 @@ johan.andruejol
 
 itkVideoFileWriter.txx
 file
-3
+10
 
 
 
-2010-10-01T18:54:10.337471Z
-b2cc3880f8b362f0f85edbc7d98f61fd
-2010-10-01T19:06:37.364087Z
-3
+2010-10-05T13:48:04.255251Z
+e9689a1b190d7dba70f3a4e3494e26e4
+2010-10-05T14:32:41.373320Z
+10
 johan.andruejol
 
 

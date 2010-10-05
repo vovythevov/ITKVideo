@@ -3,7 +3,7 @@
 #include "itkVideoFileReader.h"
 #include "itkVideoFileWriter.h"
 #include "itkDifferenceImageFilter.h"
-#include "itkReflectImageFilter.h"
+#include "itkSimpleContourExtractorImageFilter.h"
 
 
 int main (int argv, char **argc)
@@ -12,16 +12,15 @@ int main (int argv, char **argc)
   itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
   reader->SetFileName("C:/projects/ITK-A2D2/A2D2_build/Debug/inde-circulation.avi");
 
-  itk::ReflectImageFilter<OutputImageType,OutputImageType>::Pointer filter
-    = itk::ReflectImageFilter<OutputImageType,OutputImageType>::New();
+  itk::SimpleContourExtractorImageFilter<OutputImageType,OutputImageType>::Pointer filter
+    = itk::SimpleContourExtractorImageFilter<OutputImageType,OutputImageType>::New();
   filter->SetInput(reader->GetOutput());
-  filter->SetDirection(0);
 
   unsigned long i;
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(filter->GetOutput());
-  VideoWriter->SetFileName("C:/projects/ITK-A2D2/A2D2_build/images/Inversed_Indian_Crossroad.avi");
+  VideoWriter->SetFileName("C:/projects/ITK-A2D2/A2D2_build/images/Simple_Contour_Extract_Indian_Crossroad.avi");
 
   for (i = 1; i <= 93 ; i ++ )
     {

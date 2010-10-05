@@ -1,11 +1,16 @@
 cmake_minimum_required(VERSION 2.8)
 project(A2D2)
 
+include (CTEST)
+enable_testing ()
+
 set(openCVImageFilters_SRCS itkFaceDetectionFilterTest.cxx )
 
 set(openCVVideoFilters_SRCS itkVideoFileReaderTest.cxx )
 
 set(openCVMotionTracker_SRCS itkMotionTrackerTest.cxx )
+
+set(openCVTransformDICOMToVideo_SRCS itkTransformDICOMToVideo.cxx )
 
 
 find_package ( OpenCV REQUIRED )
@@ -22,5 +27,8 @@ target_link_libraries(itkVideoFileReaderTest ${ITK_LIBRARIES} ${OpenCV_LIBS})
 
 add_executable(itkMotionTrackerTest ${openCVMotionTracker_SRCS})
 target_link_libraries(itkMotionTrackerTest ${ITK_LIBRARIES} ${OpenCV_LIBS})
+
+add_executable(itkTransformDICOMToVideo ${openCVTransformDICOMToVideo_SRCS})
+target_link_libraries(itkTransformDICOMToVideo ${ITK_LIBRARIES} ${OpenCV_LIBS})
 
 

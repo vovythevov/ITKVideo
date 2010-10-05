@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 project(A2D2)
 
+enable_testing ()
+include (CTest)
+
+
 set(openCVImageFilters_SRCS itkFaceDetectionFilterTest.cxx )
 
 set(openCVVideoFilters_SRCS itkVideoFileReaderTest.cxx )

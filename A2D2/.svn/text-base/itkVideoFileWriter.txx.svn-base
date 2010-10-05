@@ -188,7 +188,7 @@ void VideoFileWriter< TInputImage >
 
   //Retrieve the data so we don't reload the data
   //We instead use the same buffer ( same buffer -> same image )
-  cvSetData(this->m_Temp,const_cast<TInputImage::PixelType*>(inputPtr->GetBufferPointer()),this->m_Size.width);
+  cvSetData(this->m_Temp,const_cast<TInputImage::PixelType*>(inputPtr->GetBufferPointer()),this->m_Temp->widthStep);
 
   //We need to convert it to a RGB image
   cvCvtColor(this->m_Temp, this->m_FrameToWrite, CV_GRAY2RGB);
@@ -203,7 +203,7 @@ void VideoFileWriter< TInputImage >
          ( this->ProcessObject::GetInput(0) );
   
   //compute the pixel depth
-  int depth = sizeof(TInputImage::PixelType);
+  int depth = sizeof(TInputImage::PixelType)*8;
   
   //Get the image in region
   itk::ImageRegion<2> region = inputPtr->GetLargestPossibleRegion();
@@ -214,7 +214,7 @@ void VideoFileWriter< TInputImage >
 
   //Create the header
   this->m_Temp = cvCreateImageHeader(this->m_Size,depth,1);
-  this->m_FrameToWrite = cvCreateImage(this->m_Size,IPL_DEPTH_8U, 3);
+  this->m_FrameToWrite = cvCreateImage(this->m_Size,depth, 3);
 
   if ( this->m_Temp == 0 )
     {
