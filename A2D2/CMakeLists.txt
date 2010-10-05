@@ -11,7 +11,6 @@ set(openCVMotionTracker_SRCS itkMotionTrackerTest.cxx )
 set(openCVTransformDICOMToVideo_SRCS itkTransformDICOMToVideo.cxx )
 set(openCVVideoFileReaderExample_SRCS itkVideoFileReaderExample.cxx )
 
-
 find_package ( OpenCV REQUIRED )
 include_directories ( ${OpenCV_INCLUDE_DIRS} )
 

@@ -3,27 +3,33 @@
 #include "itkVideoFileReader.h"
 #include "itkVideoFileWriter.h"
 #include "itkDifferenceImageFilter.h"
-#include "itkSimpleContourExtractorImageFilter.h"
 
 
 int main (int argv, char **argc)
 {
   typedef itk::Image< unsigned char, 2>   OutputImageType;  
-  itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
-  reader->SetFileName("./Testing/Data/inde-circulation.avi");
+  itk::VideoFileReader< OutputImageType >::Pointer TestReader = itk::VideoFileReader< OutputImageType >::New();
+  TestReader->SetFileName("./Testing/Data/inde-circulation.avi");
+  itk::VideoFileReader< OutputImageType >::Pointer ValidReader = itk::VideoFileReader< OutputImageType >::New();
+  ValidReader->SetFileName("./Testing/Data/inde-circulation.avi");
 
-  itk::SimpleContourExtractorImageFilter<OutputImageType,OutputImageType>::Pointer filter
-    = itk::SimpleContourExtractorImageFilter<OutputImageType,OutputImageType>::New();
-  filter->SetInput(reader->GetOutput());
+  TestReader->SetNextFrameIsFrameRequested(true);
+  TestReader->SetFrameRequested(1);
+
+  itk::DifferenceImageFilter<OutputImageType,OutputImageType>::Pointer filter
+    = itk::DifferenceImageFilter<OutputImageType,OutputImageType>::New();
+  filter->SetTestInput(TestReader->GetOutput());
+  filter->SetValidInput(ValidReader->GetOutput());
 
   unsigned long i;
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(filter->GetOutput());
-  VideoWriter->SetFileName("./Testing/Results/Simple_Contour_Extract_Indian_Crossroad.avi");
+  VideoWriter->SetFileName("./Testing/Results/Motion_Tracker_Indian_Crossroad.avi");
 
-  for (i = 1; i <= 93 ; i ++ )
+  for (i = 0; i < 1000; i ++ )
     {
+    
     try
       {
       VideoWriter->Update();
@@ -37,12 +43,18 @@ int main (int argv, char **argc)
       std::cerr<<e.GetNameOfClass()<<std::endl;
       std::cerr<<e.GetDescription()<<std::endl;
       }
-    reader->KeepReading();
+
+    if ( i == 0 )
+      {
+      TestReader->SetNextFrameIsFrameRequested(false);
+      }
+
+    ValidReader->KeepReading();
+    TestReader->KeepReading();
     }
 
   VideoWriter->EndVideo();
 
   std::cout<<"Done !"<<std::endl;
-  std::cin>>i;
   return EXIT_SUCCESS;
 }
