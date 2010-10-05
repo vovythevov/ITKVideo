@@ -6,12 +6,10 @@ include (CTest)
 
 
 set(openCVImageFilters_SRCS itkFaceDetectionFilterTest.cxx )
-
 set(openCVVideoFilters_SRCS itkVideoFileReaderTest.cxx )
-
 set(openCVMotionTracker_SRCS itkMotionTrackerTest.cxx )
-
 set(openCVTransformDICOMToVideo_SRCS itkTransformDICOMToVideo.cxx )
+set(openCVVideoFileReaderExample_SRCS itkVideoFileReaderExample.cxx )
 
 
 find_package ( OpenCV REQUIRED )
@@ -31,5 +29,8 @@ target_link_libraries(itkMotionTrackerTest ${ITK_LIBRARIES} ${OpenCV_LIBS})
 
 add_executable(itkTransformDICOMToVideo ${openCVTransformDICOMToVideo_SRCS})
 target_link_libraries(itkTransformDICOMToVideo ${ITK_LIBRARIES} ${OpenCV_LIBS})
+
+add_executable(itkVideoFileReaderExample ${openCVVideoFileReaderExample_SRCS})
+target_link_libraries(itkVideoFileReaderExample ${ITK_LIBRARIES} ${OpenCV_LIBS})
 
 

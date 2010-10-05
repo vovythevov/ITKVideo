@@ -21,7 +21,7 @@ int main (int argv, char **argc)
   reader->SetFileName("C:/faces3.png");
 
   filter->SetInput(reader->GetOutput());
-  filter->SetTrainerFileName("./Debug/haarcascade_frontalface_alt2.xml");
+  filter->SetTrainerFileName("./Testing/Data/haarcascade_frontalface_alt2.xml");
   filter->SetColor(1);
   filter->SetDrawRectangles(false);
   filter->SetGenerateROI(true);

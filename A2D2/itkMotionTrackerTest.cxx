@@ -10,7 +10,7 @@ int main (int argv, char **argc)
 {
   typedef itk::Image< unsigned char, 2>   OutputImageType;  
   itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
-  reader->SetFileName("C:/projects/ITK-A2D2/A2D2_build/Debug/inde-circulation.avi");
+  reader->SetFileName("./Testing/Data/inde-circulation.avi");
 
   itk::SimpleContourExtractorImageFilter<OutputImageType,OutputImageType>::Pointer filter
     = itk::SimpleContourExtractorImageFilter<OutputImageType,OutputImageType>::New();
@@ -20,7 +20,7 @@ int main (int argv, char **argc)
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(filter->GetOutput());
-  VideoWriter->SetFileName("C:/projects/ITK-A2D2/A2D2_build/images/Simple_Contour_Extract_Indian_Crossroad.avi");
+  VideoWriter->SetFileName("./Testing/Results/Simple_Contour_Extract_Indian_Crossroad.avi");
 
   for (i = 1; i <= 93 ; i ++ )
     {

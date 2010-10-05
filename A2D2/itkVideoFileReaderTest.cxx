@@ -73,7 +73,7 @@ int main (int argv, char **argc)
 {
   typedef itk::Image< unsigned char, 2>   OutputImageType;  
   itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
-  reader->SetFileName("C:/projects/ITK-A2D2/A2D2_build/Debug/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi");
+  reader->SetFileName("./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi");
  
   //reader->LoadVideo();
   
@@ -81,12 +81,12 @@ int main (int argv, char **argc)
   unsigned long i;
 
    itk::FaceDetectionFilter< OutputImageType >::Pointer filter = itk::FaceDetectionFilter< OutputImageType >::New();
-  filter->SetTrainerFileName("./Debug/haarcascade_frontalface_alt.xml" ); 
+  filter->SetTrainerFileName("./Testing/Data/haarcascade_frontalface_alt.xml" ); 
   filter->SetInput(reader->GetOutput());
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(filter->GetOutput());
-  VideoWriter->SetFileName("C:/projects/ITK-A2D2/A2D2_build/images/Gray_Kaamelot.avi");
+  VideoWriter->SetFileName("./Testing/Results/Gray_Kaamelot.avi");
 
   VideoWriter->EndVideo();
 

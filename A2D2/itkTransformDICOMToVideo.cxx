@@ -21,12 +21,12 @@ int main (int argv, char **argc)
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(reader->GetOutput());
-  VideoWriter->SetFileName("C:/projects/ITK-A2D2/A2D2_build/images/DicomImageAsAVideo.avi");
+  VideoWriter->SetFileName("./Testing/Results/DicomImageAsAVideo.avi");
 
   for (i = 1; i <= 93 ; i ++ )
     {
     //To set a different filename each time
-    std::string filename = "C:/projects/ITK-A2D2/A2D2_build/Debug/CTHeadAxialDicom/CTHead";
+    std::string filename = "./Testing/Data/CTHeadAxialDicom/CTHead";
     filename += itoa(i,buf,10);
     filename += ".dcm";
     reader->SetFileName(filename.c_str());
