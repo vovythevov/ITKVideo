@@ -7,6 +7,8 @@ set(openCVVideoFilters_SRCS itkVideoFileReaderTest.cxx )
 
 set(openCVMotionTracker_SRCS itkMotionTrackerTest.cxx )
 
+set(openCVTransformDICOMToVideo_SRCS itkTransformDICOMToVideo.cxx )
+
 
 find_package ( OpenCV REQUIRED )
 include_directories ( ${OpenCV_INCLUDE_DIRS} )
@@ -22,5 +24,8 @@ target_link_libraries(itkVideoFileReaderTest ${ITK_LIBRARIES} ${OpenCV_LIBS})
 
 add_executable(itkMotionTrackerTest ${openCVMotionTracker_SRCS})
 target_link_libraries(itkMotionTrackerTest ${ITK_LIBRARIES} ${OpenCV_LIBS})
+
+add_executable(itkTransformDICOMToVideo ${openCVTransformDICOMToVideo_SRCS})
+target_link_libraries(itkTransformDICOMToVideo ${ITK_LIBRARIES} ${OpenCV_LIBS})
 
 

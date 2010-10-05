@@ -1,4 +1,6 @@
 #include "iostream"
+#include "cv.h"
+#include "highgui.h"
 
 #include "itkVideoFileWriter.h"
 #include "itkImageFileReader.h"
@@ -11,7 +13,7 @@
 
 int main (int argv, char **argc)
 {
-  typedef itk::Image< unsigned char, 2>   OutputImageType;  
+  typedef itk::Image<char, 2>   OutputImageType;  
   itk::ImageFileReader< OutputImageType >::Pointer reader = itk::ImageFileReader< OutputImageType >::New();
 
   unsigned long i;
@@ -25,27 +27,38 @@ int main (int argv, char **argc)
     {
     //To set a different filename each time
     std::string filename = "C:/projects/ITK-A2D2/A2D2_build/Debug/CTHeadAxialDicom/CTHead";
-    filename += _itoa_s(i,buf,10);
+    filename += itoa(i,buf,10);
     filename += ".dcm";
     reader->SetFileName(filename.c_str());
-    try
-      {
-      //Appending the frame in the video
-      VideoWriter->Update();
+    try 
+      {  
+      try
+        {
+        //Appending the frame in the video
+        VideoWriter->Update();
+        }
+      catch (itk::ExceptionObject &e)
+        {
+        VideoWriter->Print(std::cout);
+        std::cerr<<e.GetFile()<<std::endl;
+        std::cerr<<e.GetLine()<<std::endl;
+        std::cerr<<e.GetLocation()<<std::endl;
+        std::cerr<<e.GetNameOfClass()<<std::endl;
+        std::cerr<<e.GetDescription()<<std::endl;
+        }
       }
-    catch (itk::ExceptionObject &e)
+    catch (cv::Exception &e)
       {
-      VideoWriter->Print(std::cout);
-      std::cerr<<e.GetFile()<<std::endl;
-      std::cerr<<e.GetLine()<<std::endl;
-      std::cerr<<e.GetLocation()<<std::endl;
-      std::cerr<<e.GetNameOfClass()<<std::endl;
-      std::cerr<<e.GetDescription()<<std::endl;
+      std::cerr<<e.err<<std::endl;
+      std::cerr<<e.func<<std::endl;
+      std::cerr<<e.line<<std::endl;
+      std::cerr<<e.msg<<std::endl;
       }
     }
   //Optionnal
   VideoWriter->EndVideo();
 
   std::cout<<"Done !"<<std::endl;
+  std::cin>>i;
   return EXIT_SUCCESS;
 }
