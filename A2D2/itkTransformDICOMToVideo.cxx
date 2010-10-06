@@ -13,7 +13,7 @@
 
 int main (int argv, char **argc)
 {
-  typedef itk::Image<char, 2>   OutputImageType;  
+  typedef itk::Image<unsigned char, 2>   OutputImageType;  
   itk::ImageFileReader< OutputImageType >::Pointer reader = itk::ImageFileReader< OutputImageType >::New();
 
   unsigned long i;
