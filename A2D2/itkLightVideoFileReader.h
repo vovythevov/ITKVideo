@@ -65,6 +65,8 @@ public:
   /** Get the number of frame **/
   itkGetConstMacro(FrameTotal,unsigned long);
 
+  /** Try to load a video **/
+  void LoadVideo();
 
   /** Method to call so the next the reader isn't up-to-date.**/
   /** This way, on the next update, the reader do read a new frame **/
@@ -80,8 +82,7 @@ protected:
 
   void GenerateData();  
   
-  /** Try to load a video **/
-  void LoadVideo();
+
 
   LightVideoFileReader();
   ~LightVideoFileReader(){};

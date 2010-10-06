@@ -63,15 +63,17 @@ public:
   void PlayInput (unsigned long frame);
   void PlayInput ();
   void PlayOutput (unsigned long frame);
-  void PlayOutput ();
+  void PlayOutput ();  
+  
+  /** Try to load a video **/
+  void LoadVideo(); 
 
   /** Parse the image **/
   //typename itk::Image<typename TOutputImage::PixelType,2>::Pointer StreamVideo();
 
 protected:  
   
-  /** Try to load a video **/
-  void LoadVideo(); 
+
   
   void PrintSelf(std::ostream & os, Indent indent) const;
 
