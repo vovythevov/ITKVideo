@@ -17,7 +17,7 @@ int main (int argv, char **argc)
 
   reader->LoadVideo();
   
-  //unsigned long FrameTotal = reader->GetFrameTotal();
+  unsigned long FrameTotal = reader->GetFrameTotal();
   unsigned long i;
   char buf[2000];
 

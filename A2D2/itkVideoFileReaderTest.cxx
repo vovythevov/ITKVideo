@@ -75,7 +75,7 @@ int main (int argv, char **argc)
   itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
   reader->SetFileName("./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi");
  
-  //reader->LoadVideo();
+  reader->LoadVideo();
   
   unsigned long FrameTotal = reader->GetFrameTotal();
   unsigned long i;
