@@ -1,6 +1,7 @@
 #include "itkVideoIOBase.h"
 #include "itkExceptionObject.h"
 #include "itkImportImageFilter.h"
+#include "itkImageToImageFilter.h"
 #include "cv.h"
 #include "highgui.h"
 
@@ -10,8 +11,17 @@
 namespace itk
 {
 
-template <class TOutputImage>
-class ITK_EXPORT OpenCVIO : public VideoIOBase < TOutputImage >
+/** \class OpenCVIO
+ * \brief 
+ *  
+ *
+ * \sa VideoIOBase
+ *
+ * \ingroup OpenCVFilters
+ */
+
+template <class TImage>
+class ITK_EXPORT OpenCVIO : public VideoIOBase < TImage >
 {
 public:
   /** Standard class typedefs. **/
@@ -23,24 +33,26 @@ public:
   itkTypeMacro(OpenCVIO, Superclass);
   
   /** Convinient typedef **/ 
-  typedef itk::ImportImageFilter<typename TOutputImage::PixelType,2>   ImportFilterType;
+  typedef itk::ImportImageFilter<typename TImage::PixelType,2>   ImportFilterType;
 
   /** Try to open a video **/
   /** Return true if in case of a success, false for a faillure **/
-  bool Open (const char* filename);
+  bool OpenReader (const char* filename);
+  bool OpenWriter (const char* filename, typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage);
 
   /** Try to close a video **/
   /** Return true if in case of a success, false for a faillure **/
   bool Close (const char* filename);
 
   /** Return the state of the video (opened or not) **/
-  bool Is_Open () {return this->m_Open;};
+  bool IsReaderOpen () {return this->m_ReaderOpen;};
+  bool IsWriterOpen () {return this->m_WriterOpen;};
 
   /** Return the image read form a video file **/
-  typename itk::Image<typename OutputPixelType,2>::Pointer Read();
+  typename itk::Image<typename PixelType,2>::Pointer Read();
 
   /** Write a frame and return true if succeed (false otherwise) **/
-  bool Write (typename itk::Image<typename OutputPixelType,2>::Pointer ITKImage);
+  bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage);
 
   /** A bunch of accessor **/
   int GetWidth() {return this->m_Width;};
@@ -66,8 +78,11 @@ private:
   IplImage                              *m_CVImage;
   IplImage                              *m_Temp;
   CvCapture                             *m_Capture;
-  bool                                  m_Open;
+  CvVideoWriter                         *m_Writer;
+  bool                                  m_ReaderOpen;
+  bool                                  m_WriterOpen;
 
+  int                                   m_FourCC;
   double                                m_FpS;
   unsigned long                         m_FrameTotal;
   int                                   m_Width;

@@ -1,16 +1,13 @@
-#include "cv.h"
-#include "highgui.h"
 #include "itkExceptionObject.h"
 #include "itkProcessObject.h"
-#include "itkImageToImageFilter.h"
+#include "itkVideoIOBase.h"
 
 #ifndef __itkVideoFileWriter_h
 #define __itkVideoFileWriter_h
 
 namespace itk
 {
-  
-/** \class DoNothingFilter
+ /** \class DoNothingFilter
  * \brief Do Nothing
  *  Used to call an update for all the class in the pipeline
  *  before VideoFileWriter. This way we are sure that the data is available.
@@ -46,7 +43,6 @@ protected :
     this->GraftOutput(const_cast< TInputImage * >(this->GetInput()) );
     }
 };
-
 /** \class LightVideoFileWriter
  * \brief Write an Video File and stream it using OpenCV libs
  *  Enable you to write video.
@@ -92,19 +88,25 @@ public:
   itkTypeMacro(LightVideoFileWriter, ProcessObject);
 
   /** Set/Get method for the Filename (which really is his path) **/
-  void SetFileName(const char* name);
+  void SetFileName (const char *filename);
   itkGetStringMacro(FileName);
 
   /** Set/Get method for the codec, by default IYUV**/
   void SetFourCC (int fourcc);
-  itkGetMacro(FourCC,int);
+  int GetFourCC() {return this->m_VideoIO->GetFourCC();}
 
   /** Set/Get the FpS. 25 by default **/
   void SetFpS(double framefrequency);
-  itkGetMacro(FpS,double);
+  double GetFpS() {return this->m_VideoIO->GetFpS();}
+  //itkGetMacro(FpS,double);
 
   /** Set/Get the input **/
   void SetInput(const TInputImage *input); 
+
+  /** Set the use of openCV (or vxl) **/
+  /** Attention OpenCV only accepts char (or unsigned char) **/
+  /** OpenCv by default **/
+  void UseOpenCV ( bool useOpenCV );
   
   virtual void Update()
     {
@@ -129,11 +131,14 @@ protected:
     this->EndVideo();
     };
 
+  bool                                      m_UseOpenCV;
+  bool                                      m_WriterCreated;
   std::string                               m_FileName;
-  CvVideoWriter                             *m_Writer;
-  IplImage                                  *m_FrameToWrite;
-  double                                    m_FpS;
-  int                                       m_FourCC;
+  //CvVideoWriter                             *m_Writer;
+  //IplImage                                  *m_FrameToWrite;
+  //double                                    m_FpS;
+  //int                                       m_FourCC;
+  typename itk::VideoIOBase<TInputImage>::Pointer m_VideoIO;
 
 private:
   VideoFileWriter(const Self &); //purposely not implemented
@@ -142,9 +147,9 @@ private:
   void TransformITKImageToCVImage();
   void CreateVideo();
 
-  IplImage                                                *m_Temp;
-  CvSize                                                  m_Size;
-  bool                                                    m_VideoCreated;
+  //IplImage                                                *m_Temp;
+  //CvSize                                                  m_Size;
+  //bool                                                    m_VideoCreated;
   typename itk::DoNothingFilter<TInputImage>::Pointer     m_DoNothingFilter;
 
 };

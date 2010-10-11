@@ -8,7 +8,7 @@
 namespace itk
 {
 
-template <class TOutputImage>
+template <class TImage>
 class ITK_EXPORT VideoIOBase : public LightProcessObject
 {
 public:
@@ -18,8 +18,8 @@ public:
   typedef SmartPointer< Self >                      Pointer;
 
   /** Convinient typedef **/
-  typedef TOutputImage                              OutputImageType;
-  typedef typename OutputImageType::PixelType       OutputPixelType;
+  typedef TImage                              ImageType;
+  typedef typename ImageType::PixelType       PixelType;
 
   /** Run-time type information (and related methods). **/
   itkTypeMacro(VideoIOBase, Superclass);
@@ -29,7 +29,8 @@ public:
   /** Try to open a video **/
   /** Return true if in case of a success, false for a faillure **/
   /** Intended to be overloaded by subclasses **/
-  virtual bool Open (const char* filename) = 0;
+  virtual bool OpenReader (const char* filename) = 0;
+  virtual bool OpenWriter (const char* filename,typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage) = 0;
 
   /** Try to close a video **/
   /** Return true if in case of a success, false for a faillure **/
@@ -37,13 +38,14 @@ public:
   virtual bool Close (const char* filename) = 0;
 
   /** Return the state of the video (opened or not) **/
-  virtual bool Is_Open () = 0;
+  virtual bool IsReaderOpen () = 0;
+  virtual bool IsWriterOpen () = 0;
 
   /** Return the image read form a video file **/
-  virtual typename itk::Image<typename OutputPixelType,2>::Pointer Read() = 0;
+  virtual typename itk::Image<typename PixelType,2>::Pointer Read() = 0;
 
   /** Write a frame and return true if succeed (false otherwise) **/
-  virtual bool Write (typename itk::Image<typename OutputPixelType,2>::Pointer ITKImage) = 0;
+  virtual bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage) = 0;
 
   /** A bunch of accessors**/
   virtual int GetWidth() = 0;

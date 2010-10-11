@@ -20,17 +20,18 @@
 
 #include "itkImageIOBase.h"
 #include "itkOpenCVIO.h"
+#include "itkVXLIO.h"
 
 namespace itk
 {
 
-template< typename TOutputImage >
-VideoIOBase< TOutputImage >::VideoIOBase()
+template< typename TImage >
+VideoIOBase< TImage >::VideoIOBase()
 {
 }
 
-template< typename TOutputImage >
-void VideoIOBase< TOutputImage >
+template< typename TImage >
+void VideoIOBase< TImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

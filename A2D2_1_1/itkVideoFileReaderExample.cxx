@@ -14,7 +14,6 @@ int main (int argv, char **argc)
   typedef itk::Image<unsigned char, 2>   OutputImageType;  
   itk::LightVideoFileReader< OutputImageType >::Pointer reader = itk::LightVideoFileReader< OutputImageType >::New();
   reader->SetFileName("./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi");
-
   reader->LoadVideo();
   
   unsigned long FrameTotal = reader->GetFrameTotal();

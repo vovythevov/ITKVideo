@@ -39,6 +39,7 @@ int main (int argv, char **argc)
         }
       catch (itk::ExceptionObject &e)
         {
+        std::cerr<<i<<std::endl;
         VideoWriter->Print(std::cout);
         std::cerr<<e.GetFile()<<std::endl;
         std::cerr<<e.GetLine()<<std::endl;
@@ -59,5 +60,6 @@ int main (int argv, char **argc)
   VideoWriter->EndVideo();
 
   std::cout<<"Done !"<<std::endl;
+  std::cin>>i;
   return EXIT_SUCCESS;
 }

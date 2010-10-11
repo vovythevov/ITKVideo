@@ -18,7 +18,7 @@
 #define __itkVideoFileWriter_txx
 
 #include "itkVideoFileWriter.h"
-#include "itkImageFileWriter.h"
+#include "itkVideoIOFactory.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -33,21 +33,25 @@ VideoFileWriter< TInputImage>
   //"Security stuff, we don't want to have goog values 
   //if the user hasn't set them
   this->m_FileName = "";
-  this->m_VideoCreated = false;
+
+  //Default definition
+  this->m_UseOpenCV = true;
+  this->m_WriterCreated = false;
+  //this->m_VideoCreated = false;
   //Value that the user may not modify
-  this->m_FpS = 25;
+  //this->m_FpS = 25;
   //#if ( defined( _WIN32 ) || defined( WIN32 ) )
-  this->m_FourCC = CV_FOURCC('P','I','M','1');
+  //this->m_FourCC = CV_FOURCC('P','I','M','1');
 //#else
   //this->m_FourCC = CV_FOURCC('P','I','M','1');
 //#endif
 
   //Declaration usefull for debug 
-  this->m_Writer = 0;
-  this->m_FrameToWrite = 0;
-  this->m_Temp = 0;
-  this->m_Size.width = 0;
-  this->m_Size.height = 0;
+  //this->m_Writer = 0;
+  //this->m_FrameToWrite = 0;
+  //this->m_Temp = 0;
+  //this->m_Size.width = 0;
+  //this->m_Size.height = 0;
   this->m_DoNothingFilter = itk::DoNothingFilter<TInputImage>::New();
 }
 
@@ -62,15 +66,26 @@ VideoFileWriter< TInputImage >
   Superclass::PrintSelf(os, indent);
   os << indent << "File name : "<<this->m_FileName<<std::endl; 
   
-  if (this->m_VideoCreated == true)
+  /*if (this->m_VideoCreated == true)
     {
       os << indent << "Image dimensions : ["<<this->m_Size.width<<","
         <<this->m_Size.height<<"]"<<std::endl;
       os << indent << "Encoding : "<<this->m_FourCC<<std::endl;
       os << indent << "Number of frame per second : "<<this->m_FpS<<std::endl;
-    }
+    }*/
  
 } // end PrintSelf
+
+template< typename TInputImage >
+void VideoFileWriter< TInputImage >
+::UseOpenCV ( bool useOpenCV )
+{
+  if ( useOpenCV != this->m_UseOpenCV )
+    {
+    this ->m_UseOpenCV = useOpenCV;
+    this->Modified();
+    }
+}
 
 template< typename TInputImage >
 void VideoFileWriter< TInputImage >
@@ -83,10 +98,42 @@ void VideoFileWriter< TInputImage >
   //To make sure the data is here
   this->m_DoNothingFilter->SetInput(inputPtr);
   this->m_DoNothingFilter->Update();
+  
   //Or maybe I could do that instead of the DoNothingFilter
-  /*//For uptdating the whole pipeline
-  inputPtr->UpdateOutputInformation();
-  inputPtr->UpdateOutputData();*/
+  //For uptdating the whole pipeline
+  //inputPtr->UpdateOutputInformation();
+  //inputPtr->UpdateOutputData();
+  
+  if ( this->m_WriterCreated == false )
+    {
+    if ( this->m_UseOpenCV == true )
+      {
+      this->m_VideoIO = itk::VideoIOFactory<TInputImage>::CreateVideoIO(
+          itk::VideoIOFactory<TInputImage>::ITK_USE_OPENCV);
+      this->m_WriterCreated = true;
+      }
+    else
+      {
+      this->m_VideoIO = itk::VideoIOFactory<TInputImage>::CreateVideoIO(
+          itk::VideoIOFactory<TInputImage>::ITK_USE_VXL);
+      this->m_WriterCreated = true;
+      }
+      this->m_VideoIO->OpenWriter(this->m_FileName.c_str(),inputPtr);
+    } 
+  this->m_VideoIO->Write(inputPtr);
+
+  /*
+    // Get the input pointer
+  TInputImage::Pointer inputPtr = static_cast< TInputImage * >
+         ( this->ProcessObject::GetInput(0) );
+  
+  //To make sure the data is here
+  this->m_DoNothingFilter->SetInput(inputPtr);
+  this->m_DoNothingFilter->Update();
+  //Or maybe I could do that instead of the DoNothingFilter
+  //For uptdating the whole pipeline
+  //inputPtr->UpdateOutputInformation();
+  //inputPtr->UpdateOutputData();
 
   if ( this->m_VideoCreated == false )
     {
@@ -103,7 +150,7 @@ void VideoFileWriter< TInputImage >
   
   this->TransformITKImageToCVImage();
 
-  cvWriteFrame(this->m_Writer,this->m_FrameToWrite);
+  cvWriteFrame(this->m_Writer,this->m_FrameToWrite);*/
 }
 
 template< typename TInputImage >
@@ -111,10 +158,10 @@ void VideoFileWriter< TInputImage >
 ::SetFileName(const char* name)
 {
   this->m_FileName = name;
-  this->m_VideoCreated = false;
+  this->m_WriterCreated = false;
   this->Modified();
 }
-
+/*
 template< typename TInputImage >
 void VideoFileWriter< TInputImage >
 ::SetFourCC(int fourcc)
@@ -122,8 +169,8 @@ void VideoFileWriter< TInputImage >
   this->m_FourCC = fourcc;
   this->m_VideoCreated = false;
   this->Modified();
-}
-
+}*/
+/*
 template< typename TInputImage >
 void VideoFileWriter< TInputImage >
 ::SetFpS(double framefrequency)
@@ -131,7 +178,7 @@ void VideoFileWriter< TInputImage >
   this->m_FpS = framefrequency;
   this->m_VideoCreated = false;
   this->Modified();
-}
+}*/
 
 
 template< class TInputImage >
@@ -148,7 +195,7 @@ template< class TInputImage >
 void
 VideoFileWriter < TInputImage >
 ::Play()
-{
+{/*
   if ( this->m_Writer == 0 || this->m_FrameToWrite == 0 )
     {
     itk::ExceptionObject exception;
@@ -159,7 +206,7 @@ VideoFileWriter < TInputImage >
     }
   
   cvShowImage("FrameToWrite",this->m_FrameToWrite);
-  int k = cvWaitKey(1000/this->m_FpS);
+  int k = cvWaitKey(1000/this->m_FpS);*/
 
 }
 
@@ -167,7 +214,7 @@ template< class TInputImage >
 void
 VideoFileWriter < TInputImage >
 ::EndVideo()
-{  
+{  /*
   this->m_VideoCreated = false; 
   
   if ( this->m_Writer != 0 )
@@ -175,9 +222,21 @@ VideoFileWriter < TInputImage >
     cvReleaseVideoWriter(&this->m_Writer);
     this->Modified();
     this->m_Writer = 0;
-    }
-}
+    }*/
+  if (this->m_WriterCreated == true )
+  {
+    this->m_WriterCreated = false;
 
+    if (this->m_VideoIO->Close(this->m_FileName.c_str()) != true )
+      {
+      itk::ExceptionObject exception;
+      exception.SetDescription("Error, when closing video ");
+      exception.SetLocation("VideoFileWriter");
+      throw exception;
+      }
+  }
+}
+/*
 template< class TInputImage >
 void VideoFileWriter< TInputImage >
 ::TransformITKImageToCVImage()
@@ -229,7 +288,7 @@ void VideoFileWriter< TInputImage >
     this->m_FourCC,this->m_FpS,this->m_Size,1); 
 
   this->m_VideoCreated = true;
-}
+}*/
 
 } // end namespace itk
 

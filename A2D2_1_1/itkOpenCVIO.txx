@@ -23,27 +23,30 @@
 namespace itk
 {
 
-template< typename TOutputImage >
-OpenCVIO< TOutputImage >::OpenCVIO()
+template< typename TImage >
+OpenCVIO< TImage >::OpenCVIO()
 {
   this->m_CVImage = 0;
   this->m_Temp = 0;
   this->m_Capture = 0;
-  this-> m_Open = false;
-  this->m_FpS = 0;
+  this->m_Writer = 0;
+  this->m_ReaderOpen = false;
+  this->m_WriterOpen = false;
+  this->m_FpS = 25;
   this->m_FrameTotal = 0;
   this->m_Width = 0;
   this->m_Height = 0;
+  this->m_FourCC = CV_FOURCC('P','I','M','1');
   
   this->m_ImportFilter = typename ImportFilterType::New();
 }
 
-template< typename TOutputImage >
-void OpenCVIO< TOutputImage >
+template< typename TImage >
+void OpenCVIO< TImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  if (this->m_Open == true && this->m_CVImage != NULL)
+  if (this->m_CVImage != NULL)
     {
     os << indent << "Image dimensions : ["<<this->m_CVImage->width<<","
         <<this->m_CVImage->height<<"]"<<std::endl;
@@ -55,9 +58,9 @@ void OpenCVIO< TOutputImage >
     }
 }
 
-template< typename TOutputImage >
-bool OpenCVIO< TOutputImage >
-::Open(const char* filename)
+template< typename TImage >
+bool OpenCVIO< TImage >
+::OpenReader(const char* filename)
 {
   // load the file 
   this->m_Capture = cvCaptureFromFile( filename );
@@ -84,20 +87,29 @@ bool OpenCVIO< TOutputImage >
   this->m_CVImage = cvCreateImage( cvSize(this->m_Width,this->m_Height), IPL_DEPTH_8U, 1 );
 
   // asserting that the video has been succesfully loaded
-  this->m_Open = true;
+  this->m_ReaderOpen = true;
   return true;
 }
 
-template< typename TOutputImage >
-bool OpenCVIO< TOutputImage >
+template< typename TImage >
+bool OpenCVIO< TImage >
 ::Close(const char* filname)
 {
-  return false;
+  if ( this->m_Writer != 0 )
+    {
+    cvReleaseVideoWriter(&this->m_Writer);
+    this->m_Writer = 0;
+    return true;
+    }
+  else
+    {
+    return false;
+    }
 }
 
-template< typename TOutputImage >
-typename itk::Image<typename TOutputImage::PixelType,2>::Pointer
-OpenCVIO <TOutputImage> :: Read()
+template< typename TImage >
+typename itk::Image<typename TImage::PixelType,2>::Pointer
+OpenCVIO <TImage> :: Read()
 {
   if ( this->m_Capture == NULL || this->m_CVImage == NULL )
     {
@@ -148,18 +160,70 @@ OpenCVIO <TOutputImage> :: Read()
   //CV_RGB2GRAY: convert RGB image to grayscale 
   cvCvtColor(this->m_Temp,this->m_CVImage, CV_RGB2GRAY );
  
-  this->m_ImportFilter->SetImportPointer(reinterpret_cast<typename OutputPixelType*>
+  this->m_ImportFilter->SetImportPointer(reinterpret_cast<typename PixelType*>
     (this->m_CVImage->imageData),this->m_CVImage->imageSize,false );
   this->m_ImportFilter->Update();
   
   return this->m_ImportFilter->GetOutput();
 }
 
-template< typename TOutputImage >
-bool OpenCVIO< TOutputImage >::Write
-(typename itk::Image<typename TOutputImage::PixelType,2>::Pointer ITKImage)
+template< typename TImage >
+bool OpenCVIO< TImage >
+::OpenWriter(const char* filename, typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage)
 {
-  return false;
+  //compute the pixel depth
+  int depth = sizeof(TImage::PixelType)*8;
+  
+  //Get the image in region
+  this->m_Region = ITKImage->GetLargestPossibleRegion();
+  this->m_Size = this->m_Region.GetSize();
+  
+  CvSize size;
+  size.width = this->m_Size[0];
+  size.height = this->m_Size[1];
+
+  //Create the header
+  this->m_Temp = cvCreateImageHeader(size,depth,1);
+  this->m_CVImage = cvCreateImage(size,depth, 3);
+
+  if ( this->m_Temp == NULL )
+    {
+    itk::ExceptionObject exception;
+    exception.SetDescription("Error, when creating the video");
+    exception.SetLocation("LightVideoFileWriter");
+    throw exception;
+    }
+  else
+    {
+    //Creating the writer 
+    this->m_Writer = cvCreateVideoWriter(filename,
+      this->m_FourCC,this->m_FpS,size,1); 
+    this->m_WriterOpen = true;
+    }
+}
+
+template< typename TImage >
+bool OpenCVIO< TImage >::Write
+(typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage)
+{
+  if ( this->m_Writer == NULL )
+    {
+    itk::ExceptionObject exception;
+    exception.SetDescription("Error, when using the video");
+    exception.SetLocation("LightVideoFileWriter");
+    throw exception;
+    }
+  
+   //Retrieve the data so we don't reload the data
+  //We instead use the same buffer ( same buffer -> same image )
+  cvSetData(this->m_Temp,const_cast<TImage::PixelType*>(ITKImage->GetBufferPointer()),this->m_Temp->widthStep);
+
+  //We need to convert it to a RGB image
+  cvCvtColor(this->m_Temp, this->m_CVImage, CV_GRAY2RGB);
+
+  cvWriteFrame(this->m_Writer,this->m_CVImage);
+  
+  return true;
 }
 
 
