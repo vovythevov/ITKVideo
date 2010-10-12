@@ -20,6 +20,7 @@
 
 #include "itkVideoIOFactory.h"
 #include "itkOpenCVIOFactory.h"
+//#include "itkVXLIOFactory.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
@@ -31,6 +32,7 @@ VideoIOFactory <TImage>::CreateVideoIO( LIBRARY_USED lib )
 {
   RegisterBuiltInFactories();
 
+  VideoIOBase<TImage>::Pointer ptr;
   std::list< LightObject::Pointer > allobjects =
     ObjectFactoryBase::CreateAllInstance("itkVideoIOBase");
   std::list< LightObject::Pointer >::iterator i;
@@ -40,20 +42,26 @@ VideoIOFactory <TImage>::CreateVideoIO( LIBRARY_USED lib )
     {
     if ( count == lib )
       {
-      //VideoIOBase<TImage> *io 
-      VideoIOBase<TImage>::Pointer ptr = dynamic_cast< VideoIOBase<TImage>* >(i->GetPointer());
-      if ( ptr.IsNotNull() )
+        ptr = dynamic_cast< VideoIOBase<TImage>* >(i->GetPointer());
+        if ( ptr.IsNotNull() )
         {
-        //ptr = io;
         return ptr; 
         }
       }
+      /*VideoIOBase<TImage> *io = reinterpret_cast< VideoIOBase<TImage>* >(i->GetPointer());
+      if ( io )
+        {
+        std::list< VideoIOBase<TImage>::Pointer > possibleVideoIO;
+        possibleVideoIO.push_back(io);
+        std::list< VideoIOBase<TImage>::Pointer >::iterator k = possibleVideoIO.begin();
+        return *k; 
+        }
+      }*/
     ++count;
     }
   
   std::cerr << "Error VideoIO factory did not return an VideoIOBase "<< std::endl;
   return 0;
-
 }
 
 template <class TImage>

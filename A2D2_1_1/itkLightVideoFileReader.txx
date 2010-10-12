@@ -18,8 +18,6 @@
 #define __itkLightVideoFileReader_txx
 
 #include "itkLightVideoFileReader.h"
-#include "itkImageSource.h"
-#include "itkVideoIOBase.h"
 #include "itkVideoIOFactory.h"
 
 #include <itksys/SystemTools.hxx>
@@ -39,17 +37,7 @@ LightVideoFileReader< TOutputImage, ConvertPixelTraits >
   
   //Declaration of default behavior
   this->m_VideoLoaded = false;
-  this->m_UseOpenCV = true;
-
-
-  /*//Declaration usefull for debug 
-  this->m_Capture = 0;
-  this->m_CVImage = 0;
-  this->m_Temp = 0;*/
-
-  //Declaration here so we only declare one filter
-  //this->m_ImportFilter = ImportFilterType::New();
-  
+  this->m_UseOpenCV = true; 
 }
 
 /*
@@ -62,18 +50,6 @@ LightVideoFileReader< TOutputImage, ConvertPixelTraits >
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "File name : "<<this->m_FileName<<std::endl; 
-  /*
-  if (this->m_CVImage != 0)
-    {
-      os << indent << "Image dimensions : ["<<this->m_CVImage->width<<","
-        <<this->m_CVImage->height<<"]"<<std::endl;
-      os << indent << "Origin : "<<this->m_CVImage->origin<<std::endl;
-      os << indent << "Image spacing (in bits) : "<<this->m_CVImage->depth<<std::endl;
-      os << indent << "Image Size : "<<this->m_CVImage->imageSize<<std::endl;
-      os << indent << "Color model : "<<this->m_CVImage->colorModel
-        <<" ("<<this->m_CVImage->nChannels<<" channels)"<<std::endl;
-    }*/
- 
 } // end PrintSelf
 
 
@@ -162,6 +138,16 @@ void LightVideoFileReader< TOutputImage, ConvertPixelTraits >
     this->m_VideoIO = itk::VideoIOFactory<TOutputImage>::CreateVideoIO(
           itk::VideoIOFactory<TOutputImage>::ITK_USE_VXL);
     }
+
+  if ( this->m_VideoIO.IsNull() )
+    {
+    itk::ExceptionObject exception;
+    exception.SetDescription("Error, the video hasn't been " 
+      "correctly created");
+    exception.SetLocation("LightVideoFileReader");
+    throw exception;
+    }
+
   this->m_VideoIO->OpenReader(this->m_FileName.c_str());
 
   if ( ! this->m_VideoIO->IsReaderOpen() )

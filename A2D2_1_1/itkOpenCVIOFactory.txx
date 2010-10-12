@@ -16,7 +16,6 @@
 =========================================================================*/
 #include "itkOpenCVIOFactory.h"
 #include "itkCreateObjectFunction.h"
-#include "itkOpenCVIO.h"
 #include "itkVersion.h"
 
 namespace itk

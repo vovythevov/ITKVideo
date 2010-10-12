@@ -102,7 +102,7 @@ protected:
   std::string                                                     m_FileName;
   bool                                                            m_VideoLoaded;      
   bool                                                            m_UseOpenCV;
-  typename itk::VideoIOBase<typename OutputImageType>             *m_VideoIO;
+  typename itk::VideoIOBase<typename OutputImageType>::Pointer    m_VideoIO;
   
 private:
   LightVideoFileReader(const Self &); //purposely not implemented

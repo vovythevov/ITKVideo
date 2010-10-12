@@ -1,7 +1,6 @@
 #include "itkVideoIOBase.h"
 #include "itkExceptionObject.h"
 #include "itkImportImageFilter.h"
-#include "itkImageToImageFilter.h"
 #include "cv.h"
 #include "highgui.h"
 
@@ -31,6 +30,9 @@ public:
 
   /** Run-time type information (and related methods). **/
   itkTypeMacro(OpenCVIO, Superclass);
+
+  /** New Macro **/
+  itkNewMacro(Self);
   
   /** Convinient typedef **/ 
   typedef itk::ImportImageFilter<typename TImage::PixelType,2>   ImportFilterType;
@@ -64,10 +66,9 @@ public:
   unsigned long GetFrameTotal () {return this->m_FrameTotal;};
   double GetFpS() {return this->m_FpS;};
 
+protected:  
   OpenCVIO();
   ~OpenCVIO(){};
-
-protected:
 
   void PrintSelf(std::ostream & os, Indent indent) const;
 

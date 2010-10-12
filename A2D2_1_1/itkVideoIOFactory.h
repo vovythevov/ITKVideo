@@ -18,7 +18,6 @@
 #define __itkVideoIOFactory_h
 
 #include "itkObject.h"
-#include "itkVideoIOBase.h"
 
 namespace itk
 {
@@ -41,17 +40,16 @@ public:
           ITK_USE_VXL
           };
 
-  /** Run-time type information (and related methods). */
+  /** Run-time type information (and related methods). **/
   itkTypeMacro(VideoIOFactory, Object);
 
-  /** Convenient typedefs. */
+  /** Convenient typedefs. **/
   typedef typename itk::VideoIOBase<TImage>::Pointer VideoIOBasePointer;
 
-  /** Create the appropriate ImageIO depending on the particulars of the file.
-    */
+  /** Create the appropriate ImageIO depending on the particulars of the file.**/
   static VideoIOBasePointer CreateVideoIO( LIBRARY_USED myChoice );
 
-  /** Register Built-in factories */
+  /** Register Built-in factories **/
   static void RegisterBuiltInFactories();
 
 protected:
