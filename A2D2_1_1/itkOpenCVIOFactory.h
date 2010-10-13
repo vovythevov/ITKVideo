@@ -26,7 +26,7 @@
 
 namespace itk
 {
-/** \class VideoeIOFactory
+/** \class VideoIOFactory
  * \brief Create instances of openCVIO objects using an object factory.
  */
 template <class TImage>

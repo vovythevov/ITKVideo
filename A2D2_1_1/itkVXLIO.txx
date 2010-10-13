@@ -30,6 +30,7 @@ VXLIO< TImage >::VXLIO()
   //this->m_CVImage = 0;
   //this->m_Temp = 0;
   this->m_VIDLImage = 0;
+  this->m_VIDLFrame = 0;
   this->m_Reader = 0;
   this->m_ReaderOpen = false;
   this->m_WriterOpen = false;
@@ -37,7 +38,7 @@ VXLIO< TImage >::VXLIO()
   this->m_FrameTotal = 0;
   this->m_Width = 0;
   this->m_Height = 0;
-  this->m_FourCC = 0; //CV_FOURCC('P','I','M','1');
+  this->m_Encoder = vidl_ffmpeg_ostream_params::DEFAULT;
   
   this->m_ImportFilter = typename ImportFilterType::New();
 }
@@ -66,6 +67,7 @@ bool VXLIO< TImage >
   // load the file 
   this->m_Reader = new vidl_ffmpeg_istream();
   this->m_Reader->open(filename);
+
   if ( ! this->m_Reader->is_open() )
     {
     itk::ExceptionObject exception;
@@ -76,8 +78,8 @@ bool VXLIO< TImage >
     throw exception;
     return false;
     }
-  //Get the totalt number of frame 
-  //Also setting the if the video is seekable or not (which can implies
+  //Get the total number of frame 
+  //Also set if the video is seekable or not (which can implies
   // a different way to read it...)
   this->m_FrameTotal = this->m_Reader->num_frames();
   if ( this->m_FrameTotal == -1 )
@@ -106,18 +108,17 @@ bool VXLIO< TImage >
 template< typename TImage >
 bool VXLIO< TImage >
 ::Close(const char* filname)
-{/*
+{
   if ( this->m_Writer != 0 )
     {
-    cvReleaseVideoWriter(&this->m_Writer);
+    this->m_Writer->close();
     this->m_Writer = 0;
     return true;
     }
   else
     {
     return false;
-    }*/
-  return false;
+    }
 }
 
 template< typename TImage >
@@ -177,52 +178,71 @@ VXLIO <TImage> :: Read()
 template< typename TImage >
 bool VXLIO< TImage >
 ::OpenWriter(const char* filename, typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage)
-{/*
-  //compute the pixel depth
-  int depth = sizeof(TImage::PixelType)*8;
-  
-  //Get the image in region
+{
+  //Get the image in region so that we can get the size of the image to write
   this->m_Region = ITKImage->GetLargestPossibleRegion();
   this->m_Size = this->m_Region.GetSize();
   
-  CvSize size;
-  size.width = this->m_Size[0];
-  size.height = this->m_Size[1];
+  vidl_ffmpeg_ostream_params parameters ;
+  parameters.frame_rate_ = 29.95;//25 by default, can be changed
+  //parameters.bit_rate_ = 5000;//5000 by default in VXL
+  //Since I'm not sure if changing it is a good idea, I leave the default
+  parameters.ni_ = this->m_Size[0];//Set the width
+  parameters.nj_ = this->m_Size[1];//Set the Height
+  parameters.encoder_ = this->m_Encoder;//DVVIDEO by default can be changed
+  //parameter.file_format_ = vidl_ffmpeg_ostream_params::GUESS;//No choice...
+  
+  this->m_Writer = new vidl_ffmpeg_ostream(filename,parameters);
 
-  //Create the header
-  this->m_Temp = cvCreateImageHeader(size,depth,1);
-  this->m_CVImage = cvCreateImage(size,depth, 3);
-
-  if ( this->m_Temp == NULL )
-    {
-    itk::ExceptionObject exception;
-    exception.SetDescription("Error, when creating the video");
-    exception.SetLocation("LightVideoFileWriter");
-    throw exception;
-    }
-  else
-    {
-    //Creating the writer 
-    this->m_Writer = cvCreateVideoWriter(filename,
-      this->m_FourCC,this->m_FpS,size,1); 
-    this->m_WriterOpen = true;
-    }
-    */
-  return false;
+  return this->m_Writer->open();
 }
 
 template< typename TImage >
 bool VXLIO < TImage >::Write
 (typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage)
-{/*
-  if ( this->m_Writer == NULL )
+{
+  if ( ! this->m_Writer->is_open() )
     {
     itk::ExceptionObject exception;
-    exception.SetDescription("Error, when using the video");
-    exception.SetLocation("LightVideoFileWriter");
+    exception.SetDescription("Error, the video specified hasn't been " 
+      "correctly loaded. It can be because you don't have ffmpeg "
+      "(or vxl didn't find it)");
+    exception.SetLocation("LightVideoFileReader");
     throw exception;
+    return false;
     }
+
+  vidl_pixel_format pixelFormat;
+
+  switch (sizeof(TImage::PixelType))
+  {
+  case 1 :
+    pixelFormat = vidl_pixel_format_from_string("VIDL_PIXEL_FORMAT_MONO_1");
+    break;
+  case 8 :
+    pixelFormat = vidl_pixel_format_from_string("VIDL_PIXEL_FORMAT_MONO_8");
+    break;
+  case 16 :
+    pixelFormat = vidl_pixel_format_from_string("VIDL_PIXEL_FORMAT_MONO_16");
+    break;
+  default :
+    itk::ExceptionObject exception;
+    exception.SetDescription("Error, VXL Writer doesn't support type that have more than 16 bits");
+    exception.SetLocation("VideoFileWriter");
+    throw exception;
+    return false;
+  }
+    
   
+  vidl_shared_frame  *VIDLFrame = new vidl_shared_frame(
+    const_cast<TImage::PixelType*>(ITKImage->GetBufferPointer()),
+    static_cast<unsigned int>(this->m_Size[0]),
+    static_cast<unsigned int>(this->m_Size[1]),
+    pixelFormat);
+  
+  this->m_Writer->write_frame(VIDLFrame);
+  
+  /*
    //Retrieve the data so we don't reload the data
   //We instead use the same buffer ( same buffer -> same image )
   cvSetData(this->m_Temp,const_cast<TImage::PixelType*>(ITKImage->GetBufferPointer()),this->m_Temp->widthStep);
@@ -232,6 +252,7 @@ bool VXLIO < TImage >::Write
 
   cvWriteFrame(this->m_Writer,this->m_CVImage);
   */
+
   return true;
 }
 

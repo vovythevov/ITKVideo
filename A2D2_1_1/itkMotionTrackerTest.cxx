@@ -42,6 +42,7 @@ int main (int argv, char **argc)
       std::cerr<<e.GetLocation()<<std::endl;
       std::cerr<<e.GetNameOfClass()<<std::endl;
       std::cerr<<e.GetDescription()<<std::endl;
+      return EXIT_FAILURE;
       }
 
     if ( i == 0 )

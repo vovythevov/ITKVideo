@@ -121,36 +121,6 @@ void VideoFileWriter< TInputImage >
       this->m_VideoIO->OpenWriter(this->m_FileName.c_str(),inputPtr);
     } 
   this->m_VideoIO->Write(inputPtr);
-
-  /*
-    // Get the input pointer
-  TInputImage::Pointer inputPtr = static_cast< TInputImage * >
-         ( this->ProcessObject::GetInput(0) );
-  
-  //To make sure the data is here
-  this->m_DoNothingFilter->SetInput(inputPtr);
-  this->m_DoNothingFilter->Update();
-  //Or maybe I could do that instead of the DoNothingFilter
-  //For uptdating the whole pipeline
-  //inputPtr->UpdateOutputInformation();
-  //inputPtr->UpdateOutputData();
-
-  if ( this->m_VideoCreated == false )
-    {
-    this->CreateVideo();
-    } 
-  
-  if ( this->m_Writer == 0 )
-    {
-    itk::ExceptionObject exception;
-    exception.SetDescription("Error, when using the video");
-    exception.SetLocation("LightVideoFileWriter");
-    throw exception;
-    }
-  
-  this->TransformITKImageToCVImage();
-
-  cvWriteFrame(this->m_Writer,this->m_FrameToWrite);*/
 }
 
 template< typename TInputImage >
@@ -161,25 +131,6 @@ void VideoFileWriter< TInputImage >
   this->m_WriterCreated = false;
   this->Modified();
 }
-/*
-template< typename TInputImage >
-void VideoFileWriter< TInputImage >
-::SetFourCC(int fourcc)
-{
-  this->m_FourCC = fourcc;
-  this->m_VideoCreated = false;
-  this->Modified();
-}*/
-/*
-template< typename TInputImage >
-void VideoFileWriter< TInputImage >
-::SetFpS(double framefrequency)
-{
-  this->m_FpS = framefrequency;
-  this->m_VideoCreated = false;
-  this->Modified();
-}*/
-
 
 template< class TInputImage >
 void
@@ -201,7 +152,7 @@ VideoFileWriter < TInputImage >
     itk::ExceptionObject exception;
     exception.SetDescription("Error, when playing video "
       "Make sure you called an Update on the writer before play()");
-    exception.SetLocation("LightVideoFileWriter");
+    exception.SetLocation("VideoFileWriter");
     throw exception;
     }
   
@@ -279,7 +230,7 @@ void VideoFileWriter< TInputImage >
     {
     itk::ExceptionObject exception;
     exception.SetDescription("Error, when creating the video");
-    exception.SetLocation("LightVideoFileWriter");
+    exception.SetLocation("VideoFileWriter");
     throw exception;
     }
 

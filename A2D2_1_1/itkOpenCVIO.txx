@@ -192,13 +192,16 @@ bool OpenCVIO< TImage >
     exception.SetDescription("Error, when creating the video");
     exception.SetLocation("LightVideoFileWriter");
     throw exception;
+    return false;
     }
   else
     {
     //Creating the writer 
-    this->m_Writer = cvCreateVideoWriter(filename,
-      this->m_FourCC,this->m_FpS,size,1); 
+    this->m_Writer = cvCreateVideoWriter(
+      filename,this->m_FourCC,
+      this->m_FpS,size,1); 
     this->m_WriterOpen = true;
+    return true;
     }
 }
 

@@ -31,7 +31,7 @@ public:
   /** Run-time type information (and related methods). **/
   itkTypeMacro(OpenCVIO, Superclass);
 
-  /** New Macro **/
+  /** Method for creation through the object factory. **/
   itkNewMacro(Self);
   
   /** Convinient typedef **/ 

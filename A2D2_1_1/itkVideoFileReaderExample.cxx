@@ -9,11 +9,12 @@
 // It basically saves a image from a video every minute. (every 1500 frame
 // if the frame period is 1/25 s)
 
-int main (int argv, char **argc)
+int test_reader ( std::string Input, std::string OutputWithoutExtension, bool readerUseOpenCV )
 {
   typedef itk::Image<unsigned char, 2>   OutputImageType;  
   itk::LightVideoFileReader< OutputImageType >::Pointer reader = itk::LightVideoFileReader< OutputImageType >::New();
-  reader->SetFileName("./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi");
+  reader->SetFileName(Input.c_str());
+  reader->UseOpenCV(readerUseOpenCV);
   reader->LoadVideo();
   
   unsigned long FrameTotal = reader->GetFrameTotal();
@@ -23,12 +24,12 @@ int main (int argv, char **argc)
   itk::ImageFileWriter<OutputImageType>::Pointer writer = itk::ImageFileWriter<OutputImageType>::New();
   writer->SetInput(reader->GetOutput());
 
-  for (i  = 0; i < 9000; i++)
+  for (i  = 0; i < FrameTotal ; i++)
     {
     if ( i % 1500 == 0 )
       {
       //To set a different filename each time
-      std::string filename = "./Testing/Results/VideoFileReaderExample_results/Frame_Number_";
+      std::string filename = OutputWithoutExtension.c_str();
       filename += itoa(i,buf,10);
       filename += ".png";
       writer->SetFileName(filename.c_str());
@@ -45,6 +46,7 @@ int main (int argv, char **argc)
         std::cerr<<e.GetLocation()<<std::endl;
         std::cerr<<e.GetNameOfClass()<<std::endl;
         std::cerr<<e.GetDescription()<<std::endl;
+        return EXIT_FAILURE;
         }
       }
     else
@@ -58,3 +60,28 @@ int main (int argv, char **argc)
   std::cout<<"Done !"<<std::endl;
   return EXIT_SUCCESS;
 }
+
+int main ( int argc, char *argv[] )
+{
+  int result;
+
+  result = test_reader (
+    "./Testing/Data/inde-circulation.avi", 
+    "./Testing/Results/VideoFileReaderExample_results/Frame_Number_",
+    true);
+
+  result += test_reader (
+    "./Testing/Data/inde-circulation.avi", 
+    "./Testing/Results/VideoFileReaderExample_results/Frame_Number_",
+    false);
+
+   if ( result != 0 )
+    {   
+    return EXIT_FAILURE;
+    }
+  else
+    {
+    return EXIT_SUCCESS;
+    }
+}
+

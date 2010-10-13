@@ -1,6 +1,7 @@
 #include "itkExceptionObject.h"
 #include "itkProcessObject.h"
 #include "itkVideoIOBase.h"
+#include "itkImageToImageFilter.h"
 
 #ifndef __itkVideoFileWriter_h
 #define __itkVideoFileWriter_h
@@ -13,7 +14,7 @@ namespace itk
  *  before VideoFileWriter. This way we are sure that the data is available.
  *  No other interest.
  *
- * \sa LightVideoFileWriter
+ * \sa VideoFileWriter
  *
  * \ingroup OpenCVFilters
  */
@@ -43,7 +44,7 @@ protected :
     this->GraftOutput(const_cast< TInputImage * >(this->GetInput()) );
     }
 };
-/** \class LightVideoFileWriter
+/** \class VideoFileWriter
  * \brief Write an Video File and stream it using OpenCV libs
  *  Enable you to write video.
  *  
@@ -85,7 +86,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). **/
-  itkTypeMacro(LightVideoFileWriter, ProcessObject);
+  itkTypeMacro(VideoFileWriter, ProcessObject);
 
   /** Set/Get method for the Filename (which really is his path) **/
   void SetFileName (const char *filename);
@@ -134,10 +135,7 @@ protected:
   bool                                      m_UseOpenCV;
   bool                                      m_WriterCreated;
   std::string                               m_FileName;
-  //CvVideoWriter                             *m_Writer;
-  //IplImage                                  *m_FrameToWrite;
-  //double                                    m_FpS;
-  //int                                       m_FourCC;
+
   typename itk::VideoIOBase<TInputImage>::Pointer m_VideoIO;
 
 private:

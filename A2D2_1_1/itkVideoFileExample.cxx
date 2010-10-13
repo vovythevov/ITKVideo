@@ -4,93 +4,37 @@
 
 #include "itkVideoFileReader.h"
 #include "itkVideoFileWriter.h"
-#include "itkFaceDetectionFilter.h"
 
-/*
-// I leave that here, just in case.
-// It shouldn't have to be used though.
-void DrawRectangles (CvSeq *faces, IplImage* img)
-{
-   assert(faces);
-
-  // Create two points to represent the face locations
-  CvPoint pt1, pt2;
-  int i;
-
-  // Loop the number of faces found.
-  for( i = 0; i < (faces ? faces->total : 0) ; i++ )
-    {
-    // Create a new rectangle for drawing the face
-    CvRect* r = (CvRect*)cvGetSeqElem( faces, i );
-    assert(r);
-    // Find the dimensions of the face,and scale it if necessary
-    pt1.x = r->x;
-    pt2.x = (r->x+r->width);
-    pt1.y = r->y;
-    pt2.y = (r->y+r->height);
-    // Draw the rectangle in the input image
-    cvRectangle( img, pt1, pt2,
-      CV_RGB(255,0,0),3, 8, 0 );
-    }
-}
-
-void DetectFaces ( IplImage *img )
-{
-  assert( img ); 
-
-  CvMemStorage* storage = 0;
-  CvHaarClassifierCascade* cascade = 0;
-  
-  // Load the HaarClassifierCascade
-  cascade= (CvHaarClassifierCascade*)cvLoad( "./Debug/haarcascade_frontalface_alt.xml" ); 
-  assert( cascade ); 
-
-
-  // Allocate the memory storage
-  storage = cvCreateMemStorage(0);
-  assert( storage );
-
-  // Find whether the cascade is loaded, to find the faces. If yes, then:
-  if( cascade )
-    {
-    // There can be more than one face in an image. So create a growable sequence of faces.
-    // Detect the objects and store them in the sequence
-    CvSeq* faces = cvHaarDetectObjects( img, cascade, storage,
-                                        1.1, 2, CV_HAAR_DO_CANNY_PRUNING,
-                                        cvSize(40, 40) );
-
-     DrawRectangles(faces,img);
-
-    }
-  else
-    {
-      std::cerr<<"Too bad, didn't worked"<<std::endl;
-    }
-}*/
-
-
-int main (int argv, char **argc)
+int test_pipeline (std::string Input, std::string Output, bool readerUseOpenCV, bool writerUseOpenCV)
 {
   typedef itk::Image< unsigned char, 2>   OutputImageType;  
   itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
-  reader->SetFileName("./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi");
+  reader->SetFileName();
  
-  reader->LoadVideo();
+  try
+    {
+    reader->LoadVideo();
+    }
+  catch (itk::ExceptionObject &e)
+    {
+    std::cerr<<e.GetFile()<<std::endl;
+    std::cerr<<e.GetLine()<<std::endl;
+    std::cerr<<e.GetLocation()<<std::endl;
+    std::cerr<<e.GetNameOfClass()<<std::endl;
+    std::cerr<<e.GetDescription()<<std::endl;
+    return EXIT_FAILURE;
+    }
   
   unsigned long FrameTotal = reader->GetFrameTotal();
   unsigned long i;
 
-   itk::FaceDetectionFilter< OutputImageType >::Pointer filter = itk::FaceDetectionFilter< OutputImageType >::New();
-  filter->SetTrainerFileName("./Testing/Data/haarcascade_frontalface_alt.xml" ); 
-  filter->SetInput(reader->GetOutput());
-
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
-  VideoWriter->SetInput(filter->GetOutput());
-  VideoWriter->SetFileName("./Testing/Results/Gray_Kaamelot.avi");
+  VideoWriter->SetInput(reader->GetOutput());
+  VideoWriter->SetFileName();
 
   VideoWriter->EndVideo();
 
-  for (i  = 0; i<FrameTotal-10; i++)
+  for (i  = 0; i<FrameTotal; i++)
     {
     try
       {
@@ -105,10 +49,40 @@ int main (int argv, char **argc)
       std::cerr<<e.GetLocation()<<std::endl;
       std::cerr<<e.GetNameOfClass()<<std::endl;
       std::cerr<<e.GetDescription()<<std::endl;
+      return EXIT_FAILURE;
       }
     reader->KeepReading();
     }
 
   std::cout<<"Done !"<<std::endl;
+  return EXIT_SUCCESS;
+}
+
+int main (int argv, char *argc[] )
+{
+  test_pipeline(
+    "./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi",
+    "./Testing/Results/Gray_Kaamelot.avi",
+    true,
+    true);
+
+  test_pipeline(
+    "./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi",
+    "./Testing/Results/Gray_Kaamelot.avi",
+    true,
+    false);
+
+  test_pipeline(
+    "./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi",
+    "./Testing/Results/Gray_Kaamelot.avi",
+    false,
+    true);
+  
+  test_pipeline(
+    "./Testing/Data/25_26_L_Echelle_de_Perceval_La_Chambre_de_la_Reine.avi",
+    "./Testing/Results/Gray_Kaamelot.avi",
+    false,
+    false);
+
   return EXIT_SUCCESS;
 }

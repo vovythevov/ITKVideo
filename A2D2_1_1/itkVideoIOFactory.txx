@@ -20,7 +20,7 @@
 
 #include "itkVideoIOFactory.h"
 #include "itkOpenCVIOFactory.h"
-//#include "itkVXLIOFactory.h"
+#include "itkVXLIOFactory.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
@@ -79,7 +79,7 @@ VideoIOFactory <TImage> ::RegisterBuiltInFactories()
     if ( firstTime )
       {
       ObjectFactoryBase::RegisterFactory( OpenCVIOFactory<TImage>::New() );
-      //ObjectFactoryBase::RegisterFactory( VXLIOFactory<TImage>::New() );
+      ObjectFactoryBase::RegisterFactory( VXLIOFactory<TImage>::New() );
       
       firstTime = false;
       }

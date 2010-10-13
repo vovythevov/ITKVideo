@@ -1,7 +1,6 @@
 #include "itkVideoIOBase.h"
 #include "itkExceptionObject.h"
 #include "itkImportImageFilter.h"
-#include "itkImageToImageFilter.h"
 #include "vidl/vidl_ffmpeg_ostream.h"
 #include "vidl/vidl_ffmpeg_istream.h"
 
@@ -27,10 +26,13 @@ public:
   /** Standard class typedefs. **/
   typedef VXLIO                               Self;
   typedef VideoIOBase                        Superclass;
-  typedef SmartPointer< Self >                      Pointer;
+  typedef SmartPointer< Self >                Pointer;
 
   /** Run-time type information (and related methods). **/
   itkTypeMacro(VXLIO, Superclass);
+  
+  /** Method for creation through the object factory. **/
+  itkNewMacro(Self);
   
   /** Convinient typedef **/ 
   typedef itk::ImportImageFilter<typename TImage::PixelType,2>   ImportFilterType;
@@ -75,26 +77,27 @@ private:
   VXLIO(const Self &);    //purposely not implemented
   void operator=(const Self &); //purposely not implemented
 
-  vidl_pixel_format                     m_PixelFormat;
-  vidl_frame_sptr                       m_VIDLImage;
-  vidl_ffmpeg_istream                   *m_Reader;
-  vidl_ffmpeg_ostream                   *m_Writer;
-  bool                                  m_ReaderOpen;
-  bool                                  m_WriterOpen;
-  bool                                  m_VideoSeekable;
+  vidl_pixel_format                         m_PixelFormat;
+  vidl_frame_sptr                           m_VIDLImage;
+  vidl_frame_sptr                           m_VIDLFrame;
+  vidl_ffmpeg_istream                       *m_Reader;
+  vidl_ffmpeg_ostream                       *m_Writer;
+  vidl_ffmpeg_ostream_params::encoder_type  m_Encoder;
+  bool                                      m_ReaderOpen;
+  bool                                      m_WriterOpen;
+  bool                                      m_VideoSeekable;
 
-  int                                   m_FourCC;
-  double                                m_FpS;
-  unsigned long                         m_FrameTotal;
-  int                                   m_Width;
-  int                                   m_Height;
-  double                                m_Origin[2];
-  double                                m_Spacing[2];
-  typename ImportFilterType::SizeType   m_Size;
-  typename ImportFilterType::IndexType  m_Start;
-  typename ImportFilterType::RegionType m_Region;
+  double                                    m_FpS;
+  unsigned long                             m_FrameTotal;
+  int                                       m_Width;
+  int                                       m_Height;
+  double                                    m_Origin[2];
+  double                                    m_Spacing[2];
+  typename ImportFilterType::SizeType       m_Size;
+  typename ImportFilterType::IndexType      m_Start;
+  typename ImportFilterType::RegionType     m_Region;
 
-  typename ImportFilterType::Pointer    m_ImportFilter;
+  typename ImportFilterType::Pointer        m_ImportFilter;
 };
 } // end namespace itk
 
