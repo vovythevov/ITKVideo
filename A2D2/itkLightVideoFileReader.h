@@ -1,9 +1,8 @@
-#include "cv.h"
-#include "highgui.h"
 #include "itkImageSource.h"
 #include "itkExceptionObject.h"
 #include "itkDefaultConvertPixelTraits.h"
-#include "itkImportImageFilter.h"
+
+#include "itkVideoIOBase.h"
 
 #ifndef __itkLightVideoFileReader_h
 #define __itkLightVideoFileReader_h
@@ -50,7 +49,14 @@ public:
   typedef SmartPointer< Self >                            Pointer;
   typedef SmartPointer< const Self >                      ConstPointer;
 
-  typedef itk::ImportImageFilter<OutputImagePixelType,2>   ImportFilterType;
+  /** Convinient typedef **/
+  typedef TOutputImage                              OutputImageType;
+  typedef typename OutputImageType::PixelType       OutputPixelType;
+  typedef typename itk::ImportImageFilter<OutputImageType,2> ImportFilterType;
+  typedef Index<2> IndexType;
+  typedef Size<2> SizeType;
+  typedef ImageRegion<2> RegionType;
+
 
   /** Method for creation through the object factory. **/
   itkNewMacro(Self);
@@ -63,7 +69,10 @@ public:
   itkGetStringMacro(FileName);
 
   /** Get the number of frame **/
-  itkGetConstMacro(FrameTotal,unsigned long);
+  unsigned long GetFrameTotal () {return this->m_VideoIO->GetFrameTotal();};
+
+  /** Get the frame rate **/
+  double GetFpS () {return this->m_VideoIO->GetFrameTotal();}
 
   /** Try to load a video **/
   void LoadVideo();
@@ -74,6 +83,11 @@ public:
   /** been updated, the filter is up-to-date and doesn't give another frame **/
   void KeepReading();
 
+  /** For choosing between openCV and VXL **/
+  /** Attention, openCV only supports char (and unsigned char) as pixeltype **/
+  /** By default, openCV is used **/
+  void UseOpenCV( bool useOpenCV );
+
 protected: 
   
   void PrintSelf(std::ostream & os, Indent indent) const;
@@ -82,33 +96,23 @@ protected:
 
   void GenerateData();  
   
-
-
   LightVideoFileReader();
   ~LightVideoFileReader(){};
 
-  std::string                                   m_FileName;
-  unsigned long                                 m_FrameTotal;
-  CvCapture                                     *m_Capture;
-  IplImage                                      *m_CVImage;
-  bool                                          m_VideoLoaded;
-
-  typename ImportFilterType::Pointer            m_ImportFilter;
-
+  std::string                                                     m_FileName;
+  bool                                                            m_VideoLoaded;      
+  bool                                                            m_UseOpenCV;
+  typename itk::VideoIOBase<typename OutputImageType>::Pointer    m_VideoIO;
+  typename SizeType             m_Size;
+  
 private:
   LightVideoFileReader(const Self &); //purposely not implemented
   void operator=(const Self &);  //purposely not implemented
 
   void TestFileExistanceAndReadability();
 
-  IplImage                                      *m_Temp;
-  typename ImportFilterType::SizeType           m_Size;
-  typename ImportFilterType::IndexType          m_Start; 
-  typename ImportFilterType::RegionType         m_Region;
-  double                                        m_Origin[2];
-  double                                        m_Spacing[2];
-
-
+  typename IndexType            m_Start; 
+  typename RegionType           m_Region;
 };
 } // end namespace itk
 

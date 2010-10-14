@@ -1,4 +1,3 @@
-
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkFaceDetectionFilter.h"
@@ -30,7 +29,7 @@ int main (int argv, char **argc)
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
-  writer->SetFileName("C:/result.png");
+  writer->SetFileName(".Testing/FaceDetectionFilterResult.png");
   
   try
     {
@@ -56,7 +55,7 @@ int main (int argv, char **argc)
   int i;
   for ( i = 0; i < filter->GetFacesTotal() ; i++)
     {
-    std::string title = "title";
+    std::string title = "./Testing/Results/FaceDetectionFilter/Face_";
     title += table[i];
     title += ".png";
     

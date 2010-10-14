@@ -71,10 +71,14 @@ void VideoFileReader<TOutputImage>
     }
   if ( this->m_NextFrameIsFrameRequested == true )
     {
-    if (cvSetCaptureProperty(Superclass::m_Capture,
-      CV_CAP_PROP_POS_FRAMES,this->m_FrameRequested) == 0)
+    if ( Superclass::m_VideoIO->SetNextFrameToRead(this->m_FrameRequested) == false )
       {
-      std::cerr<<"Error while setting the frame"<<std::endl;
+      //Means that hte video is non-seekable or out of boundaries
+      itk::ExceptionObject exception;
+      exception.SetDescription("Error, Either the video is non-seekable" 
+        "or you're out of boundaries");
+      exception.SetLocation("VideoFileReader");
+      throw exception;
       }
     } 
   this->UpdateProperties();
@@ -109,26 +113,26 @@ template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::PlayInput()
 {
-  int result;
+  /*int result;
   cvShowImage("Reader Input",cvQueryFrame(Superclass::m_Capture));
-  result=cvWaitKey(1000/this->m_FpS);
+  result=cvWaitKey(1000/this->m_FpS);*/
 }
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::PlayOutput (unsigned long frame)
-{
+{/*
   this->SetFrameRequested(frame);
-  this->PlayOutput();
+  this->PlayOutput();*/
 }
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::PlayOutput ()
-{
+{/*
   int result;
   cvShowImage("Reader output",Superclass::m_CVImage);
-  result=cvWaitKey(1000/this->m_FpS);
+  result=cvWaitKey(1000/this->m_FpS);*/
 }
 
 template< typename TOutputImage >
@@ -139,43 +143,20 @@ void VideoFileReader<TOutputImage>
   this->Modified();
 }
 
-/*template< typename TOutputImage >
-typename itk::Image<typename TOutputImage::PixelType,2>::Pointer
-VideoFileReader<TOutputImage>
-::StreamVideo()
-{
-  if ( this->m_NextFrameIsFrameRequested == true )
-    {
-    int result = cvSetCaptureProperty(Superclass::m_Capture,
-                         CV_CAP_PROP_POS_FRAMES,this->m_FrameRequested); 
-    if (result == 0)
-      {
-      std::cerr<<"Error while setting the frame"<<std::endl;
-      }
-    }
-  
-  this->UpdateProperties();
-  return Superclass::StreamVideo();  
-}*/
-
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::UpdateProperties()
 {
-  this->m_FrameHeight = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FRAME_HEIGHT);
-  this->m_FrameWidth = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FRAME_WIDTH);
-  this->m_FrameRequested = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_POS_FRAMES);
-  this->m_PositionInMSec = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_POS_MSEC);
-  this->m_Ratio = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_POS_AVI_RATIO);
-  this->m_FpS = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FPS);
-  this->m_FourCC =
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FOURCC);
+  if ( Superclass::m_VideoLoaded == true )
+    {
+    this->m_FrameHeight = Superclass::m_VideoIO->GetHeight() ;
+    this->m_FrameWidth = Superclass::m_VideoIO->GetWidth();
+    this->m_FrameRequested = Superclass::m_VideoIO->GetHeight();
+    this->m_PositionInMSec = Superclass::m_VideoIO->GetPositionInMSec();
+    this->m_Ratio = Superclass::m_VideoIO->GetRatio();
+    this->m_FpS = Superclass::m_VideoIO->GetFpS();
+    //this->m_FourCC = Superclass::m_VideoIO->GetFourCC();
+    }
 }
 
 

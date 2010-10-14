@@ -11,7 +11,7 @@
 // we save the video in the folder C:/projects/ITK-A2D2/A2D2_build/images
 // under the name DicomImageAsAVideo.avi
 
-int main (int argv, char **argc)
+int test_writer (std::string InputWhitoutExtension, std::string Output, bool writerUseOpenCV)
 {
   typedef itk::Image<unsigned char, 2>   OutputImageType;  
   itk::ImageFileReader< OutputImageType >::Pointer reader = itk::ImageFileReader< OutputImageType >::New();
@@ -21,12 +21,13 @@ int main (int argv, char **argc)
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(reader->GetOutput());
-  VideoWriter->SetFileName("./Testing/Results/DicomImageAsAVideo.avi");
+  VideoWriter->SetFileName(Output.c_str());
+  VideoWriter->UseOpenCV(writerUseOpenCV);
 
   for (i = 1; i <= 93 ; i ++ )
     {
     //To set a different filename each time
-    std::string filename = "./Testing/Data/CTHeadAxialDicom/CTHead";
+    std::string filename = InputWhitoutExtension;
     filename += itoa(i,buf,10);
     filename += ".dcm";
     reader->SetFileName(filename.c_str());
@@ -39,12 +40,14 @@ int main (int argv, char **argc)
         }
       catch (itk::ExceptionObject &e)
         {
+        std::cerr<<i<<std::endl;
         VideoWriter->Print(std::cout);
         std::cerr<<e.GetFile()<<std::endl;
         std::cerr<<e.GetLine()<<std::endl;
         std::cerr<<e.GetLocation()<<std::endl;
         std::cerr<<e.GetNameOfClass()<<std::endl;
         std::cerr<<e.GetDescription()<<std::endl;
+        return EXIT_FAILURE;
         }
       }
     catch (cv::Exception &e)
@@ -53,6 +56,7 @@ int main (int argv, char **argc)
       std::cerr<<e.func<<std::endl;
       std::cerr<<e.line<<std::endl;
       std::cerr<<e.msg<<std::endl;
+      return EXIT_FAILURE;
       }
     }
   //Optionnal
@@ -60,4 +64,28 @@ int main (int argv, char **argc)
 
   std::cout<<"Done !"<<std::endl;
   return EXIT_SUCCESS;
+}
+
+int main (int argv, char **argc)
+{
+  int result = 0;
+
+  result += test_writer ("./Testing/Data/CTHeadAxialDicom/CTHead",
+    "C:/projects/ITK-Vid-A2D2/A2D2_1_1_build/Testing/Results/DicomImageAsAVideo.avi",
+    true);
+
+  result += test_writer ("./Testing/Data/CTHeadAxialDicom/CTHead",
+    "C:/projects/ITK-Vid-A2D2/A2D2_1_1_build/Testing/Results/DicomImageAsAVideo.avi",
+    false);
+
+  std::cin>>result;
+  
+  if ( result != 0 )
+    {   
+    return EXIT_FAILURE;
+    }
+  else
+    {
+    return EXIT_SUCCESS;
+    }
 }
