@@ -1,7 +1,7 @@
 
 #include "iostream"
 
-#include "itkLightVideoFileReader.h"
+#include "itkVideoFileReader.h"
 #include "itkImageFileWriter.h"
 
 
@@ -12,7 +12,7 @@
 int test_reader ( std::string Input, std::string OutputWithoutExtension, bool readerUseOpenCV )
 {
   typedef itk::Image<unsigned char, 2>   OutputImageType;  
-  itk::LightVideoFileReader< OutputImageType >::Pointer reader = itk::LightVideoFileReader< OutputImageType >::New();
+  itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
   reader->SetFileName(Input.c_str());
   reader->UseOpenCV(readerUseOpenCV);
   reader->LoadVideo();
@@ -26,7 +26,7 @@ int test_reader ( std::string Input, std::string OutputWithoutExtension, bool re
 
   for (i  = 0; i < FrameTotal ; i++)
     {
-    if ( i % 1500 == 0 )
+    if ( i % 500 == 0 )
       {
       //To set a different filename each time
       std::string filename = OutputWithoutExtension.c_str();
@@ -55,6 +55,27 @@ int test_reader ( std::string Input, std::string OutputWithoutExtension, bool re
       }
 
     reader->KeepReading();
+    }
+
+  std::string filename = OutputWithoutExtension + "Half.png";
+  reader->SetNextFrameIsFrameRequested(true);
+  reader->SetFrameRequested(static_cast<unsigned long>(FrameTotal/2));
+  
+  writer->SetFileName(filename.c_str());
+  try
+    {
+    writer->Update();
+    }
+  catch (itk::ExceptionObject &e)
+    {
+    reader->Print(std::cout);
+    writer->Print(std::cout);
+    std::cerr<<e.GetFile()<<std::endl;
+    std::cerr<<e.GetLine()<<std::endl;
+    std::cerr<<e.GetLocation()<<std::endl;
+    std::cerr<<e.GetNameOfClass()<<std::endl;
+    std::cerr<<e.GetDescription()<<std::endl;
+    return EXIT_FAILURE;
     }
 
   std::cout<<"Done !"<<std::endl;

@@ -53,6 +53,9 @@ public:
   /** Return the image read form a video file **/
   typename itk::Image<typename PixelType,2>::Pointer Read();
 
+  /** Set the next frame to read and return ture if operation succesfull **/
+  bool SetNextFrameToRead( unsigned long frameNumber );
+
   /** Write a frame and return true if succeed (false otherwise) **/
   bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage);
 
@@ -63,7 +66,10 @@ public:
   double GetYOrigin() {return this->m_Origin[1];};
   double GetXSpacing() {return this->m_Spacing[0];};
   double GetYSpacing() {return this->m_Spacing[1];};
+  double GetPositionInMSec () {return -1;}; //Nothing so far
+  double GetRatio () {return -1;};//Nothing so far
   unsigned long GetFrameTotal () {return this->m_FrameTotal;};
+  unsigned long GetCurrentFrame() {return this->m_CurrentFrame;};
   double GetFpS() {return this->m_FpS;};
 
   VXLIO();
@@ -77,6 +83,8 @@ private:
   VXLIO(const Self &);    //purposely not implemented
   void operator=(const Self &); //purposely not implemented
 
+  void UpdateProperties ();
+
   vidl_pixel_format                         m_PixelFormat;
   vidl_frame_sptr                           m_VIDLImage;
   vidl_frame_sptr                           m_VIDLFrame;
@@ -89,6 +97,7 @@ private:
 
   double                                    m_FpS;
   unsigned long                             m_FrameTotal;
+  unsigned long                             m_CurrentFrame;
   int                                       m_Width;
   int                                       m_Height;
   double                                    m_Origin[2];

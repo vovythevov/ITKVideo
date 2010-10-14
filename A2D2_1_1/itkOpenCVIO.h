@@ -53,6 +53,9 @@ public:
   /** Return the image read form a video file **/
   typename itk::Image<typename PixelType,2>::Pointer Read();
 
+  /** Set the next frame to read and return ture if operation succesfull **/
+  bool SetNextFrameToRead( unsigned long frameNumber );
+
   /** Write a frame and return true if succeed (false otherwise) **/
   bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage);
 
@@ -63,8 +66,11 @@ public:
   double GetYOrigin() {return this->m_Origin[1];};
   double GetXSpacing() {return this->m_Spacing[0];};
   double GetYSpacing() {return this->m_Spacing[1];};
+  double GetPositionInMSec () {return this->m_PositionInMSec;};
+  double GetRatio () {return this->m_Ratio;};
   unsigned long GetFrameTotal () {return this->m_FrameTotal;};
   double GetFpS() {return this->m_FpS;};
+  unsigned long GetCurrentFrame() {return this->m_CurrentFrame;}
 
 protected:  
   OpenCVIO();
@@ -76,6 +82,8 @@ private:
   OpenCVIO(const Self &);    //purposely not implemented
   void operator=(const Self &); //purposely not implemented
 
+  void UpdateProperties ();
+
   IplImage                              *m_CVImage;
   IplImage                              *m_Temp;
   CvCapture                             *m_Capture;
@@ -86,8 +94,11 @@ private:
   int                                   m_FourCC;
   double                                m_FpS;
   unsigned long                         m_FrameTotal;
+  unsigned long                         m_CurrentFrame;
   int                                   m_Width;
   int                                   m_Height;
+  double                                m_Ratio;
+  double                                m_PositionInMSec;
   double                                m_Origin[2];
   double                                m_Spacing[2];
   typename ImportFilterType::SizeType   m_Size;

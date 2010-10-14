@@ -26,21 +26,21 @@ namespace itk
 template< typename TOutputImage >
 VideoFileReader< TOutputImage >
 ::VideoFileReader()
-{/*
-  this->InitializeProperties();*/
+{
+  this->InitializeProperties();
 }
 
 template< typename TOutputImage >
 void VideoFileReader< TOutputImage >
 ::InitializeProperties()
-{/*
+{
   this->m_FrameRequested = 0;
   this->m_PositionInMSec = 0;
   this->m_Ratio = 0;
   this->m_FrameWidth = 0;
   this->m_FrameHeight = 0;
   this->m_FpS = 25;
-  this->m_NextFrameIsFrameRequested = false;*/
+  this->m_NextFrameIsFrameRequested = false;
 }
 
 /*
@@ -50,66 +50,70 @@ template< typename TOutputImage >
 void
 VideoFileReader< TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
-{/*
+{
   Superclass::PrintSelf(os, indent);
   os << indent << "Frame requested : "<<this->m_FrameRequested<< std::endl;
   os << indent << "Position in milliseconds : "<<this->m_PositionInMSec<< std::endl;
   os << indent << "Ratio of video elapsed : "<<this->m_Ratio<< std::endl;
   os << indent << "Frame width : "<<this->m_FrameWidth<< std::endl;
   os << indent << "Frame Height : "<<this->m_FrameHeight<< std::endl;
-  os << indent << "Number of frame per second : "<<this->m_FpS<< std::endl;*/
+  os << indent << "Number of frame per second : "<<this->m_FpS<< std::endl;
   
 } // end PrintSelf
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::GenerateData()
-{/*
+{
   if (Superclass::m_VideoLoaded == false )
     {
     this->LoadVideo();
     }
   if ( this->m_NextFrameIsFrameRequested == true )
     {
-    if (cvSetCaptureProperty(Superclass::m_Capture,
-      CV_CAP_PROP_POS_FRAMES,this->m_FrameRequested) == 0)
+    if ( Superclass::m_VideoIO->SetNextFrameToRead(this->m_FrameRequested) == false )
       {
-      std::cerr<<"Error while setting the frame"<<std::endl;
+      //Means that hte video is non-seekable or out of boundaries
+      itk::ExceptionObject exception;
+      exception.SetDescription("Error, Either the video is non-seekable" 
+        "or you're out of boundaries");
+      exception.SetLocation("VideoFileReader");
+      throw exception;
       }
     } 
   this->UpdateProperties();
-  Superclass::GenerateData();*/
+  Superclass::GenerateData();
 }
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::SetFileName(const char *filename)
-{/*
+{
   this->InitializeProperties();
-  Superclass::SetFileName(filename);*/
+  Superclass::SetFileName(filename);
 }
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::LoadVideo()
-{/*
+{
   Superclass::LoadVideo();
-  this->UpdateProperties();*/
+  this->UpdateProperties();
 }
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::PlayInput(unsigned long frame)
-{/*
+{
   this->SetFrameRequested(frame);
-  this->PlayInput();*/
+  this->PlayInput();
 }
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::PlayInput()
-{/*
-  int result;
+{
+  /*int result;
   cvShowImage("Reader Input",cvQueryFrame(Superclass::m_Capture));
   result=cvWaitKey(1000/this->m_FpS);*/
 }
@@ -134,29 +138,25 @@ void VideoFileReader<TOutputImage>
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::SetFrameRequested(unsigned long frame)
-{/*
+{
   this->m_FrameRequested = frame;
-  this->Modified();*/
+  this->Modified();
 }
 
 template< typename TOutputImage >
 void VideoFileReader<TOutputImage>
 ::UpdateProperties()
-{/*
-  this->m_FrameHeight = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FRAME_HEIGHT);
-  this->m_FrameWidth = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FRAME_WIDTH);
-  this->m_FrameRequested = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_POS_FRAMES);
-  this->m_PositionInMSec = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_POS_MSEC);
-  this->m_Ratio = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_POS_AVI_RATIO);
-  this->m_FpS = 
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FPS);
-  this->m_FourCC =
-    cvGetCaptureProperty(Superclass::m_Capture,CV_CAP_PROP_FOURCC);*/
+{
+  if ( Superclass::m_VideoLoaded == true )
+    {
+    this->m_FrameHeight = Superclass::m_VideoIO->GetHeight() ;
+    this->m_FrameWidth = Superclass::m_VideoIO->GetWidth();
+    this->m_FrameRequested = Superclass::m_VideoIO->GetHeight();
+    this->m_PositionInMSec = Superclass::m_VideoIO->GetPositionInMSec();
+    this->m_Ratio = Superclass::m_VideoIO->GetRatio();
+    this->m_FpS = Superclass::m_VideoIO->GetFpS();
+    //this->m_FourCC = Superclass::m_VideoIO->GetFourCC();
+    }
 }
 
 

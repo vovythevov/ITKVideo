@@ -59,6 +59,27 @@ void VXLIO< TImage >
         <<" ("<<this->m_CVImage->nChannels<<" channels)"<<std::endl;
     }*/
 }
+template< typename TImage >
+bool VXLIO< TImage >
+::SetNextFrameToRead (unsigned long frameNumber)
+{
+  if ( this->m_Reader->is_open() == true )
+    {
+    if (this->m_Reader->is_seekable () == true)
+      {
+      this->m_Reader->seek_frame (frameNumber);
+      this->Modified();
+      return true;
+      }
+    }
+  return false;
+}
+
+template< typename TImage >
+void VXLIO< TImage >::UpdateProperties ()
+{
+  this->m_CurrentFrame = this->m_Reader->frame_number();
+}
 
 template< typename TImage >
 bool VXLIO< TImage >
@@ -166,6 +187,8 @@ VXLIO <TImage> :: Read()
     exception.SetLocation("LightVideoFileReader");
     throw exception;
     }
+  
+  this->UpdateProperties();
  
   this->m_ImportFilter->SetImportPointer(reinterpret_cast<typename PixelType*>
     (this->m_VIDLImage->data()),this->m_VIDLImage->size(),false );

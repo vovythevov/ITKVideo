@@ -103,6 +103,7 @@ protected:
   bool                                                            m_VideoLoaded;      
   bool                                                            m_UseOpenCV;
   typename itk::VideoIOBase<typename OutputImageType>::Pointer    m_VideoIO;
+  typename SizeType             m_Size;
   
 private:
   LightVideoFileReader(const Self &); //purposely not implemented
@@ -110,7 +111,6 @@ private:
 
   void TestFileExistanceAndReadability();
 
-  typename SizeType             m_Size;
   typename IndexType            m_Start; 
   typename RegionType           m_Region;
 };

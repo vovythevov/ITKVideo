@@ -34,6 +34,7 @@ OpenCVIO< TImage >::OpenCVIO()
   this->m_WriterOpen = false;
   this->m_FpS = 25;
   this->m_FrameTotal = 0;
+  this->m_CurrentFrame = 0;
   this->m_Width = 0;
   this->m_Height = 0;
   this->m_FourCC = CV_FOURCC('P','I','M','1');
@@ -157,6 +158,8 @@ OpenCVIO <TImage> :: Read()
     throw exception;
     }
  
+  this->UpdateProperties();
+
   //CV_RGB2GRAY: convert RGB image to grayscale 
   cvCvtColor(this->m_Temp,this->m_CVImage, CV_RGB2GRAY );
  
@@ -165,6 +168,19 @@ OpenCVIO <TImage> :: Read()
   this->m_ImportFilter->Update();
   
   return this->m_ImportFilter->GetOutput();
+}
+
+template< typename TImage >
+bool OpenCVIO< TImage >::SetNextFrameToRead(unsigned long frameNumber)
+{
+  if (this ->m_Capture != NULL)
+    {
+    cvSetCaptureProperty(this->m_Capture,CV_CAP_PROP_POS_FRAMES,frameNumber);
+    this->UpdateProperties();
+    this->Modified();
+    return true;
+    }
+  return false;
 }
 
 template< typename TImage >
@@ -229,5 +245,19 @@ bool OpenCVIO< TImage >::Write
   return true;
 }
 
+template< typename TImage >
+void OpenCVIO< TImage >::UpdateProperties()
+{
+  this->m_CurrentFrame = 
+    cvGetCaptureProperty(this->m_Capture,CV_CAP_PROP_POS_FRAMES);
+  this->m_PositionInMSec = 
+    cvGetCaptureProperty(this->m_Capture,CV_CAP_PROP_POS_MSEC);
+  this->m_Ratio = 
+    cvGetCaptureProperty(this->m_Capture,CV_CAP_PROP_POS_AVI_RATIO);
+  this->m_FpS = 
+    cvGetCaptureProperty(this->m_Capture,CV_CAP_PROP_FPS);
+  this->m_FourCC =
+    cvGetCaptureProperty(this->m_Capture,CV_CAP_PROP_FOURCC);
+}
 
 }; //namespace itk end

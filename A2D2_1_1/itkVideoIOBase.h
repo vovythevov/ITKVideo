@@ -44,6 +44,9 @@ public:
   /** Return the image read form a video file **/
   virtual typename itk::Image<typename PixelType,2>::Pointer Read() = 0;
 
+  /** return true if you operation succesful **/
+  virtual bool SetNextFrameToRead(unsigned long frameNumber) = 0;
+
   /** Write a frame and return true if succeed (false otherwise) **/
   virtual bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage) = 0;
 
@@ -54,8 +57,11 @@ public:
   virtual double GetYOrigin() = 0;
   virtual double GetXSpacing() = 0;
   virtual double GetYSpacing() = 0;
+  virtual double GetPositionInMSec () = 0 ;
+  virtual double GetRatio () = 0;
   virtual unsigned long GetFrameTotal () = 0;
   virtual double GetFpS() = 0;
+  virtual unsigned long GetCurrentFrame() = 0;
 
 protected:  
   

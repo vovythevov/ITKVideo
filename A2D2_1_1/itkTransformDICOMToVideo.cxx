@@ -70,9 +70,9 @@ int main (int argv, char **argc)
 {
   int result = 0;
 
- /* result += test_writer ("./Testing/Data/CTHeadAxialDicom/CTHead",
+  result += test_writer ("./Testing/Data/CTHeadAxialDicom/CTHead",
     "C:/projects/ITK-Vid-A2D2/A2D2_1_1_build/Testing/Results/DicomImageAsAVideo.avi",
-    true);*/
+    true);
 
   result += test_writer ("./Testing/Data/CTHeadAxialDicom/CTHead",
     "C:/projects/ITK-Vid-A2D2/A2D2_1_1_build/Testing/Results/DicomImageAsAVideo.avi",

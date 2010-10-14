@@ -72,9 +72,7 @@ public:
   //typename itk::Image<typename TOutputImage::PixelType,2>::Pointer StreamVideo();
 
 protected:  
-  
-
-  
+ 
   void PrintSelf(std::ostream & os, Indent indent) const;
 
   void GenerateData();
