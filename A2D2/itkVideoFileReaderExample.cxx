@@ -1,4 +1,3 @@
-
 #include "iostream"
 
 #include "itkVideoFileReader.h"
@@ -9,11 +8,11 @@
 // It basically saves a image from a video every minute. (every 1500 frame
 // if the frame period is 1/25 s)
 
-int test_reader ( std::string Input, std::string OutputWithoutExtension, bool readerUseOpenCV )
+int test_reader ( char* Input, char* OutputWithoutExtension, bool readerUseOpenCV )
 {
   typedef itk::Image<unsigned char, 2>   OutputImageType;  
   itk::VideoFileReader< OutputImageType >::Pointer reader = itk::VideoFileReader< OutputImageType >::New();
-  reader->SetFileName(Input.c_str());
+  reader->SetFileName(Input);
   reader->UseOpenCV(readerUseOpenCV);
   reader->LoadVideo();
   
@@ -29,7 +28,7 @@ int test_reader ( std::string Input, std::string OutputWithoutExtension, bool re
     if ( i % 500 == 0 )
       {
       //To set a different filename each time
-      std::string filename = OutputWithoutExtension.c_str();
+      std::string filename = OutputWithoutExtension;
       filename += itoa(i,buf,10);
       filename += ".png";
       writer->SetFileName(filename.c_str());
@@ -57,7 +56,8 @@ int test_reader ( std::string Input, std::string OutputWithoutExtension, bool re
     reader->KeepReading();
     }
 
-  std::string filename = OutputWithoutExtension + "Half.png";
+  std::string filename = OutputWithoutExtension ;
+  filename += "Half.png";
   reader->SetNextFrameIsFrameRequested(true);
   reader->SetFrameRequested(static_cast<unsigned long>(FrameTotal/2));
   
@@ -84,9 +84,10 @@ int test_reader ( std::string Input, std::string OutputWithoutExtension, bool re
 
 int main ( int argc, char *argv[] )
 {
-  int result;
+  return test_reader(argv[1],argv[2],argv[3]);
+ /* int result=0;
 
-  result = test_reader (
+  result += test_reader (
     "./Testing/Data/inde-circulation.avi", 
     "./Testing/Results/VideoFileReaderExample_results/Frame_Number_",
     true);
@@ -103,6 +104,6 @@ int main ( int argc, char *argv[] )
   else
     {
     return EXIT_SUCCESS;
-    }
+    }*/
 }
 

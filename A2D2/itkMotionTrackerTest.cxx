@@ -5,13 +5,15 @@
 #include "itkDifferenceImageFilter.h"
 
 
-int main (int argv, char **argc)
+int motion_tracker (char* Input, char* Output,bool readerUseOpenCV, bool writerUseOpenCV)
 {
   typedef itk::Image< unsigned char, 2>   OutputImageType;  
   itk::VideoFileReader< OutputImageType >::Pointer TestReader = itk::VideoFileReader< OutputImageType >::New();
-  TestReader->SetFileName("./Testing/Data/inde-circulation.avi");
+  TestReader->SetFileName(Input);
+  TestReader->UseOpenCV(readerUseOpenCV);
   itk::VideoFileReader< OutputImageType >::Pointer ValidReader = itk::VideoFileReader< OutputImageType >::New();
-  ValidReader->SetFileName("./Testing/Data/inde-circulation.avi");
+  ValidReader->SetFileName(Input);
+  ValidReader->UseOpenCV(readerUseOpenCV);
 
   TestReader->SetNextFrameIsFrameRequested(true);
   TestReader->SetFrameRequested(1);
@@ -20,14 +22,17 @@ int main (int argv, char **argc)
     = itk::DifferenceImageFilter<OutputImageType,OutputImageType>::New();
   filter->SetTestInput(TestReader->GetOutput());
   filter->SetValidInput(ValidReader->GetOutput());
+  TestReader->LoadVideo();
+  ValidReader->LoadVideo();
 
   unsigned long i;
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(filter->GetOutput());
-  VideoWriter->SetFileName("./Testing/Results/Motion_Tracker_Indian_Crossroad.avi");
+  VideoWriter->SetFileName(Output);
+  VideoWriter->UseOpenCV(writerUseOpenCV);
 
-  for (i = 0; i < 1000; i ++ )
+  for (i = 0; i < TestReader->GetFrameTotal()-1 ; i ++ )
     {
     
     try
@@ -58,4 +63,9 @@ int main (int argv, char **argc)
 
   std::cout<<"Done !"<<std::endl;
   return EXIT_SUCCESS;
+}
+
+int main (int argv, char **argc)
+{
+  return motion_tracker(argc[1],argc[2],argc[3],argc[4]);
 }

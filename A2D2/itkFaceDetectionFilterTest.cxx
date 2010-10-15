@@ -3,8 +3,7 @@
 #include "itkFaceDetectionFilter.h"
 #include "itkRegionOfInterestImageFilter.h"
 
-
-int main (int argv, char **argc)
+int test_face_detection (char* input, char *output, char *trainerFilename)
 {
 
   typedef itk::Image< unsigned char,  2>   InputImageType;
@@ -17,10 +16,10 @@ int main (int argv, char **argc)
   typedef itk::ImageFileWriter< OutputImageType > WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName("C:/faces3.png");
+  reader->SetFileName(input);
 
   filter->SetInput(reader->GetOutput());
-  filter->SetTrainerFileName("./Testing/Data/haarcascade_frontalface_alt2.xml");
+  filter->SetTrainerFileName(trainerFilename);
   filter->SetColor(1);
   filter->SetDrawRectangles(false);
   filter->SetGenerateROI(true);
@@ -29,7 +28,7 @@ int main (int argv, char **argc)
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
-  writer->SetFileName(".Testing/FaceDetectionFilterResult.png");
+  writer->SetFileName(output);
   
   try
     {
@@ -81,5 +80,10 @@ int main (int argv, char **argc)
     }
 
   return EXIT_SUCCESS;
+}
+
+int main (int argv, char* argc[])
+{
+ return test_face_detection(argc[1],argc[2],argc[3]);
 }
 
