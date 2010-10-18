@@ -81,7 +81,7 @@ set(CTEST_UPDATE_COMMAND "${CTEST_GIT_COMMAND}")
 #
 MACRO(run_ctest)
   ctest_start(${model})
-  ctest_update(SOURCE "${CTEST_SOURCE_DIRECTORY}" RETURN_VALUE res)
+  ctest_update(SOURCE "${A2D2_SOURCE_DIR}" RETURN_VALUE res)
 
   #ctest_submit(PARTS Update Notes)
 
