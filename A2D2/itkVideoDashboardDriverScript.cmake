@@ -75,7 +75,6 @@ if(NOT EXISTS "${CTEST_SOURCE_DIRECTORY}")
 endif()
 
 set(CTEST_UPDATE_COMMAND "${CTEST_GIT_COMMAND}")
-#set (CTEST_SOURCE_DIRECTORY "${CTEST_SOURCE_DIRECTORY}/A2D2")
 
 #
 # run_ctest macro
@@ -109,8 +108,8 @@ ${ADDITIONNAL_CMAKECACHE_OPTION}
     set_property(GLOBAL PROPERTY SubProject ${label})
     set_property(GLOBAL PROPERTY Label ${label})
      
-    ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}")
-    ctest_read_custom_files("${CTEST_BINARY_DIRECTORY}")
+    ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}" SOURCE "{A2D2_SOURCE_DIR}")
+    ctest_read_custom_files("${CTEST_BINARY_DIRECTORY}" SOURCE "{A2D2_SOURCE_DIR}")
     ctest_submit(PARTS Configure)
     # Note that the Project.xml file has already been uploaded by some other CTK dashboard
     #ctest_submit(FILES "${CTEST_BINARY_DIRECTORY}/Project.xml")
