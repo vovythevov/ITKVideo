@@ -124,7 +124,8 @@ ${ADDITIONNAL_CMAKECACHE_OPTION}
       BUILD "${CTEST_BINARY_DIRECTORY}"
       #INCLUDE_LABEL ${label}
       PARALLEL_LEVEL 8
-      #EXCLUDE ${TEST_TO_EXCLUDE_REGEX})
+      #EXCLUDE ${TEST_TO_EXCLUDE_REGEX}
+      )
     # runs only tests that have a LABELS property matching "${label}"
     ctest_submit(PARTS Test)
     
