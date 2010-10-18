@@ -4,6 +4,9 @@ project(A2D2)
 enable_testing ()
 include (CTest)
 
+#Add the current directory to CMAKE Module path so cmake can fine the FindOpenCV, FindITK, FindVXL
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
+
 #set(itkVideoCommon_SRCS itkVideoIOFactory.h itkVideoIOFactory.cxx )
    
 set(openCVImageFilters_SRCS itkFaceDetectionFilterTest.cxx )
