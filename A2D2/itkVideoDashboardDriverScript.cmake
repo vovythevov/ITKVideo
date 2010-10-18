@@ -80,15 +80,22 @@ set(CTEST_UPDATE_COMMAND "${CTEST_GIT_COMMAND}")
 # run_ctest macro
 #
 MACRO(run_ctest)
+message("1")
   ctest_start(${model})
+
+message("2")
   ctest_update(SOURCE "${CTEST_SOURCE_DIRECTORY}" RETURN_VALUE res)
+
+message("3")
   #ctest_submit(PARTS Update Notes)
 
+message("4")
   # force a build if this is the first run and the build dir is empty
   if(NOT EXISTS "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt")
     message("First time build - Initialize CMakeCache.txt")
     set(res 1)
 
+message("4")
     # Write initial cache.
     file(WRITE "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" "
 CTEST_USE_LAUNCHERS:BOOL=${CTEST_USE_LAUNCHERS}
@@ -99,11 +106,13 @@ DOCUMENTATION_ARCHIVES_OUTPUT_DIRECTORY:PATH=${DOCUMENTATION_ARCHIVES_OUTPUT_DIR
 ${ADDITIONNAL_CMAKECACHE_OPTION}
 ")
   endif()
+
+message("5")
   
   if (res GREATER 0 OR force_build)
     message("----------- [ Configure ${CTEST_PROJECT_NAME} ] -----------")
     
-    set(label ctkAppLauncher)
+    set(label ITKVideo)
     
     set_property(GLOBAL PROPERTY SubProject ${label})
     set_property(GLOBAL PROPERTY Label ${label})
