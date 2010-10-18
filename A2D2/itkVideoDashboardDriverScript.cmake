@@ -37,7 +37,7 @@ foreach(var ${expected_variables})
   endif()
 endforeach()
 
-set(git_repository http://github.com/bcd123/ITK-Vid-A2D2.git)
+set(git_repository http://github.com/bcd123/ITK-Vid-A2D2/A2D2.git)
 
 # Should binary directory be cleaned?
 set(empty_binary_directory FALSE)
