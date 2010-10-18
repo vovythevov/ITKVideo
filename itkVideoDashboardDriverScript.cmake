@@ -111,7 +111,7 @@ ${ADDITIONNAL_CMAKECACHE_OPTION}
     ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}" )
     ctest_read_custom_files("${CTEST_BINARY_DIRECTORY}" )
     ctest_submit(PARTS Configure)
-    # Note that the Project.xml file has already been uploaded by some other CTK dashboard
+    # Note that the Project.xml file has already been uploaded by some other ITKVideo dashboard
     #ctest_submit(FILES "${CTEST_BINARY_DIRECTORY}/Project.xml")
 
     # Build top level
@@ -122,9 +122,9 @@ ${ADDITIONNAL_CMAKECACHE_OPTION}
     message("----------- [ Test ${CTEST_PROJECT_NAME} ] -----------")
     ctest_test(
       BUILD "${CTEST_BINARY_DIRECTORY}"
-      INCLUDE_LABEL ${label}
+      #INCLUDE_LABEL ${label}
       PARALLEL_LEVEL 8
-      EXCLUDE ${TEST_TO_EXCLUDE_REGEX})
+      #EXCLUDE ${TEST_TO_EXCLUDE_REGEX})
     # runs only tests that have a LABELS property matching "${label}"
     ctest_submit(PARTS Test)
     
