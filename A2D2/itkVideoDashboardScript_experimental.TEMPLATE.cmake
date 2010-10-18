@@ -21,7 +21,7 @@ set(MY_OPERATING_SYSTEM "Windows") # Windows, Linux, Darwin...
 set(MY_COMPILER "MSVS.9.0.30729.1")
 set(MY_ITK_VERSION "3.20")
 set(CTEST_SITE "Westeros.kitware") # for example: mymachine.kitware, mymachine.dkfz, ...
-set(CTEST_DASHBOARD_ROOT "C:/Dashboard/")
+set(CTEST_DASHBOARD_ROOT "C:/Dashboard")
 set(CTEST_CMAKE_COMMAND "C:/Program Files/CMake 2.8/bin/cmake")
 set(CTEST_CMAKE_GENERATOR "MSVC Solution files")
 
@@ -53,8 +53,8 @@ set(SCRIPT_MODE "experimental") # "experimental", "continuous", "nightly"
 #
 # Project specific properties
 #
-set(CTEST_SOURCE_DIRECTORY "${CTEST_DASHBOARD_ROOT}ITKVideo/")
-set(CTEST_BINARY_DIRECTORY "${CTEST_DASHBOARD_ROOT}ITKVideo-${CTEST_BUILD_CONFIGURATION}-${SCRIPT_MODE}/")
+set(CTEST_SOURCE_DIRECTORY "${CTEST_DASHBOARD_ROOT}/ITKVideo")
+set(CTEST_BINARY_DIRECTORY "${CTEST_DASHBOARD_ROOT}/ITKVideo-${CTEST_BUILD_CONFIGURATION}-${SCRIPT_MODE}")
 
 #
 # Additionnal CMakeCache options
