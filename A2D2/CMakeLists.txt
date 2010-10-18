@@ -4,9 +4,6 @@ project(A2D2)
 enable_testing ()
 include (CTest)
 
-#Add the current directory to CMAKE Module path so cmake can fine the FindOpenCV, FindITK, FindVXL
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
-
 #set(itkVideoCommon_SRCS itkVideoIOFactory.h itkVideoIOFactory.cxx )
    
 set(openCVImageFilters_SRCS itkFaceDetectionFilterTest.cxx )
@@ -18,6 +15,8 @@ set(itkVideoFileReaderExample_SRCS itkVideoFileReaderExample.cxx )
 #Only for creating video examples and other stuff
 set(itkVideoDraft_SRCS  itkVideoDraft.cxx)
 
+#Since the find packages doesn't work (at all)
+set(OpenCV_DIR "C:/projects/ITK-A2D2/opencv_build/")
 find_package ( OpenCV REQUIRED )
 include_directories ( ${OpenCV_INCLUDE_DIRS} )
 
