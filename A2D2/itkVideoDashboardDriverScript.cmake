@@ -84,7 +84,7 @@ message("1")
   ctest_start(${model})
 
 message("2")
-  ctest_update(SOURCE "${CTEST_SOURCE_DIRECTORY}" RETURN_VALUE res)
+  ctest_update(SOURCE "${CTEST_SOURCE_DIRECTORY}/A2D2" RETURN_VALUE res)
 
 message("3")
   #ctest_submit(PARTS Update Notes)
