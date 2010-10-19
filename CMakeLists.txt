@@ -145,7 +145,9 @@ add_test(ITKVideoTestWriterVXL itkTransformDICOMToVideo
 add_test(ITKVideoTestFaceDetection itkFaceDetectionFilterTest
     #Input
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/faces3.png
-    #Output
+    #Main Output
     ${CMAKE_CURRENT_BINARY_DIR}/Testing/FaceDetectionFilterResult.png 
+    #Faces whithout extension :
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Face_ 
     #Trainer
-    ./Testing/Data/haarcascade_frontalface_alt2.xml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/haarcascade_frontalface_alt2.xml)

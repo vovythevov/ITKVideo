@@ -19,6 +19,7 @@
 
 #include "itkFaceDetectionFilter.h"
 #include "itkPasteImageFilter.h"
+#include "itkExceptionObject.h"
 
 namespace itk
 {
@@ -115,7 +116,16 @@ void FaceDetectionFilter< TInputImage >
   
   // Load the HaarClassifierCascade
   cascade= (CvHaarClassifierCascade*)cvLoad( this->m_TrainerFileName.c_str() ); 
-  assert( cascade ); 
+  if ( cascade == NULL )
+    {
+    itk::ExceptionObject e;
+    std::string description = "Error while loading the Haar Classifier."
+      "Make sure the file : ";
+    description += this->m_TrainerFileName;
+    description += " exists.";
+    e.SetDescription(description.c_str());
+    e.SetLocation("itkFaceDetectionFilter, line 118") ; 
+    }
   
   // Allocate the memory storage
   storage = cvCreateMemStorage(0);

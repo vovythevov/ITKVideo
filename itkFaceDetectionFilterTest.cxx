@@ -3,7 +3,7 @@
 #include "itkFaceDetectionFilter.h"
 #include "itkRegionOfInterestImageFilter.h"
 
-int test_face_detection (char* input, char *output, char *trainerFilename)
+int test_face_detection (char* input, char *outputMainImage, char *outputFacesWhithoutExtension , char *trainerFilename)
 {
 
   typedef itk::Image< unsigned char,  2>   InputImageType;
@@ -23,12 +23,10 @@ int test_face_detection (char* input, char *output, char *trainerFilename)
   filter->SetColor(1);
   filter->SetDrawRectangles(false);
   filter->SetGenerateROI(true);
-  filter->Print(std::cout);
-
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
-  writer->SetFileName(output);
+  writer->SetFileName(outputMainImage);
   
   try
     {
@@ -36,6 +34,7 @@ int test_face_detection (char* input, char *output, char *trainerFilename)
     }
   catch (itk::ExceptionObject &e)
     {
+    std::cerr<<"When detecting faces"<<std::endl;
     std::cerr<<e.GetFile()<<std::endl;
     std::cerr<<e.GetLine()<<std::endl;
     std::cerr<<e.GetLocation()<<std::endl;
@@ -54,7 +53,7 @@ int test_face_detection (char* input, char *output, char *trainerFilename)
   int i;
   for ( i = 0; i < filter->GetFacesTotal() ; i++)
     {
-    std::string title = "./Testing/Results/FaceDetectionFilter/Face_";
+    std::string title = outputFacesWhithoutExtension;
     title += table[i];
     title += ".png";
     
@@ -69,6 +68,7 @@ int test_face_detection (char* input, char *output, char *trainerFilename)
       }
     catch (itk::ExceptionObject &e)
       {
+      std::cerr<<"When printing the regions detected, step #"<<i<<std::endl;
       std::cerr<<e.GetFile()<<std::endl;
       std::cerr<<e.GetLine()<<std::endl;
       std::cerr<<e.GetLocation()<<std::endl;
@@ -84,6 +84,12 @@ int test_face_detection (char* input, char *output, char *trainerFilename)
 
 int main (int argv, char* argc[])
 {
- return test_face_detection(argc[1],argc[2],argc[3]);
+  /*int k = test_face_detection("C:/projects/ITK-Vid-A2D2/Data/faces3.png",
+    "C:/projects/ITK-Vid-A2D2_build/Testing/FaceDetectionFilterResult.png",
+    "C:/projects/ITK-Vid-A2D2_build/Testing/Face_",
+    "C:/projects/ITK-Vid-A2D2/Data/haarcascade_frontalface_alt2.xml");
+  std::cin>>k;
+  return k;*/
+ return test_face_detection(argc[1],argc[2],argc[3],argc[4]);
 }
 
