@@ -46,7 +46,7 @@ add_test (ITKVideoTestMotion itkMotionTrackerTest
   #Input :
   ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi
   #Output :
-  ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/Motion_tracked_inde-circulation.avi
+  ${CMAKE_CURRENT_BINARY_DIR}/Testing/Motion_tracked_inde-circulation.avi
   #Reader use OpenCV :
   1
   #Writer use OpenCV :
@@ -59,7 +59,7 @@ add_test (ITKVideoTestMotion itkMotionTrackerTest
     #Input :
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
     #Output whithout extension :
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/VideoFileReaderExample_results/OpenCVFrame_Number_ 
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/VideoFileReaderExample_results/OpenCVFrame_Number_ 
     #Reader Use openCV :
     1)
   #with VXL
@@ -67,7 +67,7 @@ add_test (ITKVideoTestMotion itkMotionTrackerTest
     #Input :
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
     #Output whithout extension :
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/VideoFileReaderExample_results/VXLFrame_Number_ 
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/VideoFileReaderExample_results/VXLFrame_Number_ 
     #Reader Use OpenCV
     0)
  
@@ -78,7 +78,7 @@ add_test(ITKVideoTestPipelineReadOpenCVWriteOpenCV itkVideoFilePipelineTest
     #Input :
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi
     #Output :
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/inde_circulation_ReadOpenCV_WriteOpenCV.avi 
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/inde_circulation_ReadOpenCV_WriteOpenCV.avi 
     #Reader Use OpenCV
     1
     #Writer Use OpenCV
@@ -89,7 +89,7 @@ add_test(ITKVideoTestPipelineReadOpenCVWriteVXL itkVideoFilePipelineTest
     #Input :
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
     #Output :
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/inde_circulation_ReadOpenCV_WriteVXL.avi 
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/inde_circulation_ReadOpenCV_WriteVXL.avi 
     #Reader Use OpenCV
     1
     #Writer Use OpenCV
@@ -111,7 +111,7 @@ add_test(ITKVideoTestPipelineReadVXLWriteOpenCV itkVideoFilePipelineTest
     #Input
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
     #Output
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/inde_circulation_ReadVXL_WriteOpenCV.avi
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/inde_circulation_ReadVXL_WriteOpenCV.avi
     #Reader Use OpenCV
     0
     #Writer Use OpenCV
@@ -123,7 +123,7 @@ add_test(ITKVideoTestWriterOpenCV itkTransformDICOMToVideo
     #Input whithout extension
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/CTHeadAxialDicom/CTHead
     #Output
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/DicomImageAsAVideoWithOpenCV.avi
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/DicomImageAsAVideoWithOpenCV.avi
     #Writer Use OpenCV
     1
     #First Image
@@ -135,7 +135,7 @@ add_test(ITKVideoTestWriterVXL itkTransformDICOMToVideo
     #Input whithout extension
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/CTHeadAxialDicom/CTHead
     #Output
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/DicomImageAsAVideoWithVXL.avi 
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/DicomImageAsAVideoWithVXL.avi 
     #Writer Use OpenCV
     0
     #First Image
