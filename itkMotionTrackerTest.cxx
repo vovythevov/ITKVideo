@@ -26,21 +26,23 @@ int motion_tracker (char* Input, char* Output,bool readerUseOpenCV, bool writerU
   ValidReader->LoadVideo();
 
   unsigned long i;
+  unsigned long FrameTotal = TestReader->GetFrameTotal();
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(filter->GetOutput());
   VideoWriter->SetFileName(Output);
   VideoWriter->UseOpenCV(writerUseOpenCV);
 
-  for (i = 0; i < TestReader->GetFrameTotal()-1 ; i ++ )
+  for (i = 0; i < FrameTotal-1 ; i ++ )
     {
-    
     try
       {
       VideoWriter->Update();
       }
     catch (itk::ExceptionObject &e)
       {
+      std::cerr<<"Error in the loop, step # "<<i<<std::endl;
+      std::cerr<<"Total Frame : "<<FrameTotal<<std::endl;
       VideoWriter->Print(std::cout);
       std::cerr<<e.GetFile()<<std::endl;
       std::cerr<<e.GetLine()<<std::endl;
@@ -67,5 +69,12 @@ int motion_tracker (char* Input, char* Output,bool readerUseOpenCV, bool writerU
 
 int main (int argv, char **argc)
 {
-  return motion_tracker(argc[1],argc[2],argc[3],argc[4]);
+  /*int k = motion_tracker("C:/projects/ITK-Vid-A2D2/Data/inde-circulation.avi", 
+    "C:/projects/ITK-Vid-A2D2_build/Testing/Motion_tracked_inde-circulation.avi", 
+    atoi("1"),
+    atoi("1"));
+  std::cin>>k;
+  return k;*/
+
+  return motion_tracker(argc[1],argc[2],atoi(argc[3]),atoi(argc[4]));
 }

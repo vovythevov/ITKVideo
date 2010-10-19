@@ -49,5 +49,5 @@ int test_pipeline (char* Input, char* Output,bool readerUseOpenCV, bool writerUs
 
 int main (int argv, char **argc)
 {
-  return test_pipeline(argc[1],argc[2],argc[3],argc[4]);
+  return test_pipeline(argc[1],argc[2],atoi(argc[3]),atoi(argc[4]));
 }
