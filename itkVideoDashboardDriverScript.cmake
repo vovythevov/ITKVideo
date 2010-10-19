@@ -116,6 +116,8 @@ ${ADDITIONNAL_CMAKECACHE_OPTION}
 
     # Build top level
     message("----------- [ Build ${CTEST_PROJECT_NAME} ] -----------")
+    message("${CTEST_BINARY_DIRECTORY}")
+    message(${CTEST_BINARY_DIRECTORY})
     ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}" APPEND)
     ctest_submit(PARTS Build)
     
