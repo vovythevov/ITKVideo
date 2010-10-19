@@ -84,26 +84,12 @@ int test_reader ( char* Input, char* OutputWithoutExtension, bool readerUseOpenC
 
 int main ( int argc, char *argv[] )
 {
-  return test_reader(argv[1],argv[2],argv[3]);
- /* int result=0;
+  /*int k = test_reader("C:/projects/ITK-Vid-A2D2/Data/inde-circulation.avi", 
+    "C:/projects/ITK-Vid-A2D2_build/Testing/OpenCVFrame_Number_", 
+    atoi("1"));
+  std::cin>>k;
+  return k;*/
 
-  result += test_reader (
-    "./Testing/Data/inde-circulation.avi", 
-    "./Testing/Results/VideoFileReaderExample_results/Frame_Number_",
-    true);
-
-  result += test_reader (
-    "./Testing/Data/inde-circulation.avi", 
-    "./Testing/Results/VideoFileReaderExample_results/Frame_Number_",
-    false);
-
-   if ( result != 0 )
-    {   
-    return EXIT_FAILURE;
-    }
-  else
-    {
-    return EXIT_SUCCESS;
-    }*/
+  return test_reader(argv[1],argv[2],atoi(argv[3]));
 }
 

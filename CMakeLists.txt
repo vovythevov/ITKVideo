@@ -57,7 +57,7 @@ add_test (ITKVideoTestMotion itkMotionTrackerTest
     #Input :
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
     #Output whithout extension :
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/VideoFileReaderExample_results/OpenCVFrame_Number_ 
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/OpenCVFrame_Number_ 
     #Reader Use openCV :
     1)
   #with VXL
@@ -65,7 +65,7 @@ add_test (ITKVideoTestMotion itkMotionTrackerTest
     #Input :
     ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
     #Output whithout extension :
-    ${CMAKE_CURRENT_BINARY_DIR}/Testing/VideoFileReaderExample_results/VXLFrame_Number_ 
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/VXLFrame_Number_ 
     #Reader Use OpenCV
     0)
  
