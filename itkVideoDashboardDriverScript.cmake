@@ -108,7 +108,7 @@ ${ADDITIONNAL_CMAKECACHE_OPTION}
     set_property(GLOBAL PROPERTY SubProject ${label})
     set_property(GLOBAL PROPERTY Label ${label})
      
-    ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}/${label}.sln" )
+    ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}" )
     ctest_read_custom_files("${CTEST_BINARY_DIRECTORY}" )
     ctest_submit(PARTS Configure)
     # Note that the Project.xml file has already been uploaded by some other ITKVideo dashboard
@@ -116,7 +116,7 @@ ${ADDITIONNAL_CMAKECACHE_OPTION}
 
     # Build top level
     message("----------- [ Build ${CTEST_PROJECT_NAME} ] -----------")
-    ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}" APPEND)
+    ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}/${label}.sln" APPEND)
     ctest_submit(PARTS Build)
     
     message("----------- [ Test ${CTEST_PROJECT_NAME} ] -----------")
