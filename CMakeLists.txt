@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(A2D2)
+project(ITKVideo)
 
 enable_testing ()
 include (CTest)
@@ -25,7 +25,6 @@ include( ${VXL_CMAKE_DIR}/UseVXL.cmake )
 
 find_package (ITK REQUIRED)
 include( ${ITK_USE_FILE} )
-
 
 add_executable(itkFaceDetectionFilterTest ${openCVImageFilters_SRCS})
 target_link_libraries(itkFaceDetectionFilterTest ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl) 
@@ -53,19 +52,19 @@ add_test (ITKVideoTestMotion itkMotionTrackerTest ./Testing/Data/inde-circulatio
  
 #Pipeline :
   #with reader && writer opencv
-add_test(ITKVideoTestPipeline_ReadOpenCV_WriteOpenCV itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadOpenCV_WriteOpenCV.avi 1 1)  
+add_test(ITKVideoTestPipelineReadOpenCVWriteOpenCV itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadOpenCV_WriteOpenCV.avi 1 1)  
   #with opencv reader and VXL writer
-add_test(ITKVideoTestPipeline_ReadOpenCV_WriteVXL itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadOpenCV_WriteVXL.avi 1 0)
+add_test(ITKVideoTestPipelineReadOpenCVWriteVXL itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadOpenCV_WriteVXL.avi 1 0)
   #with VXL reader and OpenCV writer
-add_test(ITKVideoTestPipeline_ReadVXL_WriteVXL itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadVXL_WriteVXL.avi 0 0)
+add_test(ITKVideoTestPipelineReadVXLWriteVXL itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadVXL_WriteVXL.avi 0 0)
   #with VXL reader and writer
-add_test(ITKVideoTestPipeline_ReadVXL_WriteOpenCV itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadVXL_WriteOpenCV.avi 0 1)  
+add_test(ITKVideoTestPipelineReadVXLWriteOpenCV itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadVXL_WriteOpenCV.avi 0 1)  
 
 #Writer :
   #with openCV
-add_test(ITKVideoTestWriter_OpenCV itkTransformDICOMToVideo ./Testing/Data/CTHeadAxialDicom/CTHead ./Testing/Results/DicomImageAsAVideoWithOpenCV.avi 1 1 93)
+add_test(ITKVideoTestWriterOpenCV itkTransformDICOMToVideo ./Testing/Data/CTHeadAxialDicom/CTHead ./Testing/Results/DicomImageAsAVideoWithOpenCV.avi 1 1 93)
   #with VXL
-add_test(ITKVideoTestWriter_VXL itkTransformDICOMToVideo ./Testing/Data/CTHeadAxialDicom/CTHead ./Testing/Results/DicomImageAsAVideoWithVXL.avi 0 1 93)
+add_test(ITKVideoTestWriterVXL itkTransformDICOMToVideo ./Testing/Data/CTHeadAxialDicom/CTHead ./Testing/Results/DicomImageAsAVideoWithVXL.avi 0 1 93)
 
 #Face detection :
 add_test(ITKVideoTestFaceDetection itkFaceDetectionFilterTest ./Testing/Data/faces3.png ./Testing/FaceDetectionFilterResult.png ./Testing/Data/haarcascade_frontalface_alt2.xml)
