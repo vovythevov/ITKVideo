@@ -3,8 +3,6 @@ project(ITKVideo)
 
 enable_testing ()
 include (CTest)
-
-#set(itkVideoCommon_SRCS itkVideoIOFactory.h itkVideoIOFactory.cxx )
    
 set(openCVImageFilters_SRCS itkFaceDetectionFilterTest.cxx )
 set(itkVideoFilePipelineTest_SRCS itkVideoFilePipelineTest.cxx )
