@@ -41,7 +41,7 @@ int test_face_detection (char* input, char *output, char *trainerFilename)
     std::cerr<<e.GetLocation()<<std::endl;
     std::cerr<<e.GetNameOfClass()<<std::endl;
     std::cerr<<e.GetDescription()<<std::endl;
-    //return EXIT_FAILURE;
+    return EXIT_FAILURE;
     }
   char table[] = "1234567890qwertyuiopasdfghjklzxcvbnm";
   std::list< itk::ImageRegion<2>* >* list = filter->GetFacesAsROI();
@@ -74,7 +74,7 @@ int test_face_detection (char* input, char *output, char *trainerFilename)
       std::cerr<<e.GetLocation()<<std::endl;
       std::cerr<<e.GetNameOfClass()<<std::endl;
       std::cerr<<e.GetDescription()<<std::endl;
-      //return EXIT_FAILURE;
+      return EXIT_FAILURE;
       }
     list->pop_front();
     }

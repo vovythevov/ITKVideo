@@ -42,29 +42,112 @@ add_executable(itkVideoFileReaderExample ${itkVideoFileReaderExample_SRCS})
 target_link_libraries(itkVideoFileReaderExample ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl)
 
 #Motion tracker :
-add_test (ITKVideoTestMotion itkMotionTrackerTest ./Testing/Data/inde-circulation.avi ./Testing/Results/Motion_tracked_inde-circulation.avi 1 1 )
+add_test (ITKVideoTestMotion itkMotionTrackerTest 
+  #Input :
+  ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi
+  #Output :
+  ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/Motion_tracked_inde-circulation.avi
+  #Reader use OpenCV :
+  1
+  #Writer use OpenCV :
+  1 
+  )
  
- #Reader : 
-  #with opencv
- add_test(ITKVideoTestReaderOpenCV itkVideoFileReaderExample ./Testing/Data/inde-circulation.avi ./Testing/Results/VideoFileReaderExample_results/OpenCVFrame_Number_ 1)
+#Reader : 
+ #with opencv
+ add_test(ITKVideoTestReaderOpenCV itkVideoFileReaderExample
+    #Input :
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
+    #Output whithout extension :
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/VideoFileReaderExample_results/OpenCVFrame_Number_ 
+    #Reader Use openCV :
+    1)
   #with VXL
- add_test(ITKVideoTestReaderVXL itkVideoFileReaderExample ./Testing/Data/inde-circulation.avi ./Testing/Results/VideoFileReaderExample_results/VXLFrame_Number_ 0)
+ add_test(ITKVideoTestReaderVXL itkVideoFileReaderExample 
+    #Input :
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
+    #Output whithout extension :
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/VideoFileReaderExample_results/VXLFrame_Number_ 
+    #Reader Use OpenCV
+    0)
  
 #Pipeline :
+
   #with reader && writer opencv
-add_test(ITKVideoTestPipelineReadOpenCVWriteOpenCV itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadOpenCV_WriteOpenCV.avi 1 1)  
+add_test(ITKVideoTestPipelineReadOpenCVWriteOpenCV itkVideoFilePipelineTest
+    #Input :
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi
+    #Output :
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/inde_circulation_ReadOpenCV_WriteOpenCV.avi 
+    #Reader Use OpenCV
+    1
+    #Writer Use OpenCV
+    1)  
+    
   #with opencv reader and VXL writer
-add_test(ITKVideoTestPipelineReadOpenCVWriteVXL itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadOpenCV_WriteVXL.avi 1 0)
+add_test(ITKVideoTestPipelineReadOpenCVWriteVXL itkVideoFilePipelineTest 
+    #Input :
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
+    #Output :
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/inde_circulation_ReadOpenCV_WriteVXL.avi 
+    #Reader Use OpenCV
+    1
+    #Writer Use OpenCV
+    0)
+    
   #with VXL reader and OpenCV writer
-add_test(ITKVideoTestPipelineReadVXLWriteVXL itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadVXL_WriteVXL.avi 0 0)
+add_test(ITKVideoTestPipelineReadVXLWriteVXL itkVideoFilePipelineTest 
+    #Input
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
+    #Output
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/inde_circulation_ReadVXL_WriteVXL.avi 
+    #Reader Use OpenCV
+    0 
+    #Writer Use OpenCV
+    0)
+    
   #with VXL reader and writer
-add_test(ITKVideoTestPipelineReadVXLWriteOpenCV itkVideoFilePipelineTest ./Testing/Data/inde-circulation.avi ./Testing/Results/inde_circulation_ReadVXL_WriteOpenCV.avi 0 1)  
+add_test(ITKVideoTestPipelineReadVXLWriteOpenCV itkVideoFilePipelineTest
+    #Input
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/inde-circulation.avi 
+    #Output
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/inde_circulation_ReadVXL_WriteOpenCV.avi
+    #Reader Use OpenCV
+    0
+    #Writer Use OpenCV
+    1)  
 
 #Writer :
   #with openCV
-add_test(ITKVideoTestWriterOpenCV itkTransformDICOMToVideo ./Testing/Data/CTHeadAxialDicom/CTHead ./Testing/Results/DicomImageAsAVideoWithOpenCV.avi 1 1 93)
+add_test(ITKVideoTestWriterOpenCV itkTransformDICOMToVideo
+    #Input whithout extension
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/CTHeadAxialDicom/CTHead
+    #Output
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/DicomImageAsAVideoWithOpenCV.avi
+    #Writer Use OpenCV
+    1
+    #First Image
+    1
+    #Last Image
+    93)
   #with VXL
-add_test(ITKVideoTestWriterVXL itkTransformDICOMToVideo ./Testing/Data/CTHeadAxialDicom/CTHead ./Testing/Results/DicomImageAsAVideoWithVXL.avi 0 1 93)
+add_test(ITKVideoTestWriterVXL itkTransformDICOMToVideo
+    #Input whithout extension
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/CTHeadAxialDicom/CTHead
+    #Output
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/Results/DicomImageAsAVideoWithVXL.avi 
+    #Writer Use OpenCV
+    0
+    #First Image
+    1
+    #Second Image
+    93)
 
 #Face detection :
-add_test(ITKVideoTestFaceDetection itkFaceDetectionFilterTest ./Testing/Data/faces3.png ./Testing/FaceDetectionFilterResult.png ./Testing/Data/haarcascade_frontalface_alt2.xml)
+add_test(ITKVideoTestFaceDetection itkFaceDetectionFilterTest
+    #Input
+    ${CMAKE_CURRENT_SOURCE_DIR}/Data/faces3.png
+    #Output
+    ${CMAKE_CURRENT_BINARY_DIR}/Testing/FaceDetectionFilterResult.png 
+    #Trainer
+    ./Testing/Data/haarcascade_frontalface_alt2.xml)
