@@ -1,6 +1,6 @@
 #include "itkExceptionObject.h"
 #include "itkProcessObject.h"
-#include "itkVideoIOBase.h"
+#include "itkVideoWriterBase.h"
 #include "itkImageToImageFilter.h"
 
 #ifndef __itkVideoFileWriter_h
@@ -94,11 +94,11 @@ public:
 
   /** Set/Get method for the codec, by default IYUV**/
   void SetFourCC (int fourcc);
-  int GetFourCC() {return this->m_VideoIO->GetFourCC();}
+  int GetFourCC() {return this->m_VideoWriter->GetFourCC();}
 
   /** Set/Get the FpS. 25 by default **/
   void SetFpS(double framefrequency);
-  double GetFpS() {return this->m_VideoIO->GetFpS();}
+  double GetFpS() {return this->m_VideoWriter->GetFpS();}
   //itkGetMacro(FpS,double);
 
   /** Set/Get the input **/
@@ -136,7 +136,7 @@ protected:
   bool                                      m_WriterCreated;
   std::string                               m_FileName;
 
-  typename itk::VideoIOBase<TInputImage>::Pointer m_VideoIO;
+  typename itk::VideoWriterBase<TInputImage>::Pointer m_VideoWriter;
 
 private:
   VideoFileWriter(const Self &); //purposely not implemented

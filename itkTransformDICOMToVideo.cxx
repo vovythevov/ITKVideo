@@ -55,6 +55,5 @@ int test_writer (std::string InputWhitoutExtension, std::string Output, bool wri
 
 int main (int argv, char **argc)
 {
-  char buf[256];
   return test_writer(argc[1],argc[2],atoi(argc[3]),atoi(argc[4]),atoi(argc[5]));
 }

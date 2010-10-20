@@ -18,7 +18,7 @@
 #define __itkVideoFileWriter_txx
 
 #include "itkVideoFileWriter.h"
-#include "itkVideoIOFactory.h"
+#include "itkVideoWriterFactory.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -108,19 +108,19 @@ void VideoFileWriter< TInputImage >
     {
     if ( this->m_UseOpenCV == true )
       {
-      this->m_VideoIO = itk::VideoIOFactory<TInputImage>::CreateVideoIO(
-          itk::VideoIOFactory<TInputImage>::ITK_USE_OPENCV);
+      this->m_VideoWriter = itk::VideoWriterFactory<TInputImage>::CreateVideoWriter(
+          itk::VideoWriterFactory<TInputImage>::ITK_USE_OPENCV);
       this->m_WriterCreated = true;
       }
     else
       {
-      this->m_VideoIO = itk::VideoIOFactory<TInputImage>::CreateVideoIO(
-          itk::VideoIOFactory<TInputImage>::ITK_USE_VXL);
+      this->m_VideoWriter = itk::VideoWriterFactory<TInputImage>::CreateVideoWriter(
+          itk::VideoWriterFactory<TInputImage>::ITK_USE_VXL);
       this->m_WriterCreated = true;
       }
-      this->m_VideoIO->OpenWriter(this->m_FileName.c_str(),inputPtr);
+      this->m_VideoWriter->OpenWriter(this->m_FileName.c_str(),inputPtr);
     } 
-  this->m_VideoIO->Write(inputPtr);
+  this->m_VideoWriter->Write(inputPtr);
 }
 
 template< typename TInputImage >
@@ -178,7 +178,7 @@ VideoFileWriter < TInputImage >
   {
     this->m_WriterCreated = false;
 
-    if (this->m_VideoIO->Close(this->m_FileName.c_str()) != true )
+    if (this->m_VideoWriter->Close(this->m_FileName.c_str()) != true )
       {
       itk::ExceptionObject exception;
       exception.SetDescription("Error, when closing video ");
