@@ -71,7 +71,7 @@ void VideoFileReader<TOutputImage>
     }
   if ( this->m_NextFrameIsFrameRequested == true )
     {
-    if ( Superclass::m_VideoIO->SetNextFrameToRead(this->m_FrameRequested) == false )
+    if ( Superclass::m_VideoReader->SetNextFrameToRead(this->m_FrameRequested) == false )
       {
       //Means that hte video is non-seekable or out of boundaries
       itk::ExceptionObject exception;
@@ -149,13 +149,13 @@ void VideoFileReader<TOutputImage>
 {
   if ( Superclass::m_VideoLoaded == true )
     {
-    this->m_FrameHeight = Superclass::m_VideoIO->GetHeight() ;
-    this->m_FrameWidth = Superclass::m_VideoIO->GetWidth();
-    this->m_FrameRequested = Superclass::m_VideoIO->GetHeight();
-    this->m_PositionInMSec = Superclass::m_VideoIO->GetPositionInMSec();
-    this->m_Ratio = Superclass::m_VideoIO->GetRatio();
-    this->m_FpS = Superclass::m_VideoIO->GetFpS();
-    //this->m_FourCC = Superclass::m_VideoIO->GetFourCC();
+    this->m_FrameHeight = Superclass::m_VideoReader->GetHeight() ;
+    this->m_FrameWidth = Superclass::m_VideoReader->GetWidth();
+    this->m_FrameRequested = Superclass::m_VideoReader->GetHeight();
+    this->m_PositionInMSec = Superclass::m_VideoReader->GetPositionInMSec();
+    this->m_Ratio = Superclass::m_VideoReader->GetRatio();
+    this->m_FpS = Superclass::m_VideoReader->GetFpS();
+    //this->m_FourCC = Superclass::m_VideoReader->GetFourCC();
     }
 }
 

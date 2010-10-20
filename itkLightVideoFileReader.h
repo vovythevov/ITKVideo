@@ -2,7 +2,7 @@
 #include "itkExceptionObject.h"
 #include "itkDefaultConvertPixelTraits.h"
 
-#include "itkVideoIOBase.h"
+#include "itkVideoReaderBase.h"
 
 #ifndef __itkLightVideoFileReader_h
 #define __itkLightVideoFileReader_h
@@ -69,7 +69,7 @@ public:
   itkGetStringMacro(FileName);
 
   /** Get the number of frame **/
-  unsigned long GetFrameTotal () {return this->m_VideoIO->GetFrameTotal();};
+  unsigned long GetFrameTotal () {return this->m_VideoReader->GetFrameTotal();};
 
   /** Get the frame rate **/
   double GetFpS () {return this->m_VideoIO->GetFrameTotal();}
@@ -102,7 +102,7 @@ protected:
   std::string                                                     m_FileName;
   bool                                                            m_VideoLoaded;      
   bool                                                            m_UseOpenCV;
-  typename itk::VideoIOBase<typename OutputImageType>::Pointer    m_VideoIO;
+  typename itk::VideoReaderBase<typename OutputImageType>::Pointer    m_VideoReader;
   typename SizeType             m_Size;
   
 private:

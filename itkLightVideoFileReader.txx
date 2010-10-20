@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    itkFaceDetectionFilter.txx
+  Module:    itkLightVideoReader.txx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -18,7 +18,7 @@
 #define __itkLightVideoFileReader_txx
 
 #include "itkLightVideoFileReader.h"
-#include "itkVideoIOFactory.h"
+#include "itkVideoReaderFactory.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -33,7 +33,7 @@ LightVideoFileReader< TOutputImage, ConvertPixelTraits >
   //Security stuff, we don't want to have good values 
   //if the user hasn't set them
   this->m_FileName = "";
-  this->m_VideoIO = 0;
+  this->m_VideoReader = 0;
   
   //Declaration of default behavior
   this->m_VideoLoaded = false;
@@ -77,7 +77,7 @@ template< typename TOutputImage, class ConvertPixelTraits >
 void LightVideoFileReader< TOutputImage, ConvertPixelTraits >
 ::GenerateData()
 {  
-  if ( ! this->m_VideoIO->IsReaderOpen() )
+  if ( ! this->m_VideoReader->IsReaderOpen() )
     {
     itk::ExceptionObject exception;
     exception.SetDescription("Error, when updating, " 
@@ -86,7 +86,7 @@ void LightVideoFileReader< TOutputImage, ConvertPixelTraits >
     throw exception;
     }
 
-  this->GraftOutput(this->m_VideoIO->Read());
+  this->GraftOutput(this->m_VideoReader->Read());
 
 }
 
@@ -102,8 +102,8 @@ void LightVideoFileReader< TOutputImage, ConvertPixelTraits >
   
   //Retriveing the data for the region
   this->m_Start.Fill(0);
-  this->m_Size[0] = this->m_VideoIO->GetWidth();
-  this->m_Size[1] = this->m_VideoIO->GetHeight();  
+  this->m_Size[0] = this->m_VideoReader->GetWidth();
+  this->m_Size[1] = this->m_VideoReader->GetHeight();  
   
   //Setting the filter's region
   this->m_Region.SetIndex( this->m_Start );
@@ -130,16 +130,16 @@ void LightVideoFileReader< TOutputImage, ConvertPixelTraits >
 
   if ( this->m_UseOpenCV == true )
     {
-    this->m_VideoIO = itk::VideoIOFactory<TOutputImage>::CreateVideoIO(
-          itk::VideoIOFactory<TOutputImage>::ITK_USE_OPENCV);
+    this->m_VideoReader = itk::VideoReaderFactory<TOutputImage>::CreateVideoReader(
+          itk::VideoReaderFactory<TOutputImage>::ITK_USE_OPENCV);
     }
   else
     {
-    this->m_VideoIO = itk::VideoIOFactory<TOutputImage>::CreateVideoIO(
-          itk::VideoIOFactory<TOutputImage>::ITK_USE_VXL);
+    this->m_VideoReader = itk::VideoReaderFactory<TOutputImage>::CreateVideoReader(
+          itk::VideoReaderFactory<TOutputImage>::ITK_USE_VXL);
     }
 
-  if ( this->m_VideoIO.IsNull() )
+  if ( this->m_VideoReader.IsNull() )
     {
     itk::ExceptionObject exception;
     exception.SetDescription("Error, the video hasn't been " 
@@ -148,9 +148,9 @@ void LightVideoFileReader< TOutputImage, ConvertPixelTraits >
     throw exception;
     }
 
-  this->m_VideoIO->OpenReader(this->m_FileName.c_str());
+  this->m_VideoReader->OpenReader(this->m_FileName.c_str());
 
-  if ( ! this->m_VideoIO->IsReaderOpen() )
+  if ( ! this->m_VideoReader->IsReaderOpen() )
     {
     itk::ExceptionObject exception;
     exception.SetDescription("Error, the video specified hasn't been " 
