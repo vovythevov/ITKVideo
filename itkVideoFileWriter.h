@@ -8,42 +8,6 @@
 
 namespace itk
 {
- /** \class DoNothingFilter
- * \brief Do Nothing
- *  Used to call an update for all the class in the pipeline
- *  before VideoFileWriter. This way we are sure that the data is available.
- *  No other interest.
- *
- * \sa VideoFileWriter
- *
- * \ingroup OpenCVFilters
- */
-
-template <class TInputImage >
-
-class ITK_EXPORT DoNothingFilter : public ImageToImageFilter<TInputImage,TInputImage>
-{
-public:
-  /** Standard class typedefs. */
-  typedef DoNothingFilter                                 Self;
-  typedef ImageToImageFilter<TInputImage,TInputImage>     Superclass;
-  typedef SmartPointer< Self >                            Pointer;
-  typedef SmartPointer< const Self >                      ConstPointer;
-
-   /** Method for creation through the object factory. **/
-  itkNewMacro(Self);
-
-  /** Run-time type information (and related methods). **/
-  itkTypeMacro(DoNothingFilter, ImageToImageFilter);
-
-protected :  
-  void PrintSelf(std::ostream & os, Indent indent) const {}
-  
-  void GenerateData()
-    {
-    this->GraftOutput(const_cast< TInputImage * >(this->GetInput()) );
-    }
-};
 /** \class VideoFileWriter
  * \brief Write an Video File and stream it using OpenCV libs
  *  Enable you to write video.
@@ -144,11 +108,6 @@ private:
 
   void TransformITKImageToCVImage();
   void CreateVideo();
-
-  //IplImage                                                *m_Temp;
-  //CvSize                                                  m_Size;
-  //bool                                                    m_VideoCreated;
-  typename itk::DoNothingFilter<TInputImage>::Pointer     m_DoNothingFilter;
 
 };
 } // end namespace itk

@@ -37,22 +37,6 @@ VideoFileWriter< TInputImage>
   //Default definition
   this->m_UseOpenCV = true;
   this->m_WriterCreated = false;
-  //this->m_VideoCreated = false;
-  //Value that the user may not modify
-  //this->m_FpS = 25;
-  //#if ( defined( _WIN32 ) || defined( WIN32 ) )
-  //this->m_FourCC = CV_FOURCC('P','I','M','1');
-//#else
-  //this->m_FourCC = CV_FOURCC('P','I','M','1');
-//#endif
-
-  //Declaration usefull for debug 
-  //this->m_Writer = 0;
-  //this->m_FrameToWrite = 0;
-  //this->m_Temp = 0;
-  //this->m_Size.width = 0;
-  //this->m_Size.height = 0;
-  this->m_DoNothingFilter = itk::DoNothingFilter<TInputImage>::New();
 }
 
 /*
@@ -94,15 +78,11 @@ void VideoFileWriter< TInputImage >
     // Get the input pointer
   TInputImage::Pointer inputPtr = static_cast< TInputImage * >
          ( this->ProcessObject::GetInput(0) );
+  TInputImage::Pointer NewInput;
   
   //To make sure the data is here
-  this->m_DoNothingFilter->SetInput(inputPtr);
-  this->m_DoNothingFilter->Update();
-  
-  //Or maybe I could do that instead of the DoNothingFilter
-  //For uptdating the whole pipeline
-  //inputPtr->UpdateOutputInformation();
-  //inputPtr->UpdateOutputData();
+  inputPtr->Update();
+
   
   if ( this->m_WriterCreated == false )
     {
