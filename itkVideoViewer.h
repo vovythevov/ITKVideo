@@ -1,3 +1,20 @@
+/*=========================================================================
+
+  Program:   Insight Segmentation & Registration Toolkit
+  Module:    itkVideoViewer.h
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #include "itkExceptionObject.h"
 #include "itkProcessObject.h"
 #include "itkVideoViewerBase.h"
@@ -36,6 +53,16 @@ namespace itk
  *  The other parameter is the window name. It is important if you use OpenCv 
  *  (see When using OpenCV section). 
  *
+ *  When using OpenCV :
+ *  When you use OpenCV, the windows control is base on theirs
+ *  name. Consequently, if you want multiples windows, you must specify
+ *  different windows names.
+ *
+ *  Warning :
+ *  When you use multiple windows, the frame rate is not guaranteed to be
+ *  the rate you set (with SetWaitTime() method) since the cpu can be too slow...
+ *  You can only open one window per itkVideoViewer. If you want multiple window, 
+ *  you need one itkVideoViewer (and one different name) per window desired .
  *  
  * \sa VideoViewerBase
  * \sa VideoFileReader
@@ -49,10 +76,10 @@ class ITK_EXPORT VideoViewer : public ImageToImageFilter<TInputImage,TInputImage
 {
 public:
   /** Standard class typedefs. */
-  typedef VideoViewer                                 Self;
-  typedef ProcessObject                                   Superclass;
-  typedef SmartPointer< Self >                            Pointer;
-  typedef SmartPointer< const Self >                      ConstPointer;
+  typedef VideoViewer                             Self;
+  typedef ProcessObject                           Superclass;
+  typedef SmartPointer< Self >                    Pointer;
+  typedef SmartPointer< const Self >              ConstPointer;
 
   /** Method for creation through the object factory. **/
   itkNewMacro(Self);
@@ -63,18 +90,16 @@ public:
   /** Run-time type information (and related methods). **/
   itkTypeMacro(VideoViewer, ImageToImageFilter);
 
-  /** Set/Get the FpS. 25 by default **/
+  /** Set/Get the time between 2 frames (in milliseconds). **/
+  /** 40ms  by default **/
   /** Return true if succeed, false if not **/
-  /** (for example if the Viewer isn' opened) **/
+  /** (for example if the Viewer isn't opened) **/
   bool SetWaitTime(int MSec);
   double GetWaitTime() {return this->m_VideoWriter->GetWaitTime();}
 
-  /** Set/Get the input **/
-  void SetInput(const TInputImage *input); 
-
-  /** Set the use of openCV (or vxl) **/
-  /** Attention OpenCV only accepts char (or unsigned char) **/
-  /** OpenCv by default **/
+  /** Set the use of openCV (or VXL) **/
+  /** Attention OpenCV only accepts char (or unsigned char) as a pixel type **/
+  /** True (i.e OpenCv) by default **/
   void UseOpenCV ( bool useOpenCV );
   
   virtual void Update()
@@ -83,12 +108,13 @@ public:
     }
 
   /** Method for waiting **/
+  /** It is called after each update, so no need to call it explicitly**/
   void Wait();
 
   /** Set/Get the window name **/ 
-  /** You need to specify a different video name if you **/
-  /** want a different window. We use the name of the class **/
-  /** by default**/
+  /** If you are using OpenCV, see the correspondig **/
+  /**section (i.e. When using OpenCV)**/
+  /** We use the name of the class by default**/
   itkSetStringMacro(WindowName);
   itkGetStringMacro(WindowName);
 
@@ -101,9 +127,9 @@ public:
   void Open(const char* WindowName);
 
 protected: 
-  
+  //Print function, quite poor so far
   void PrintSelf(std::ostream & os, Indent indent) const;
-  
+  //Function called at each Update()
   void GenerateData();
 
   VideoViewer();
