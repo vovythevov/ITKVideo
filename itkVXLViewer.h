@@ -17,10 +17,11 @@
 
 #include "itkVideoViewerBase.h"
 #include <vcl_iostream.h>
-#include <vgui/vgui.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_shell_tableau.h>
+#include "vgui/vgui.h"
+#include "vgui/vgui_toolkit.h"
+#include "vgui/vgui_image_tableau.h"
+#include "vgui/vgui_viewer2D_tableau.h"
+#include "vgui/vgui_shell_tableau.h"
 
 #ifndef __itkVXLViewer_h
 #define __itkVXLViewer_h
@@ -75,8 +76,10 @@ protected:
   ~VXLViewer(){};
 
   void PrintSelf(std::ostream & os, Indent indent) const;
-  int            m_WaitTime;
-  //IplImage          *m_OpenCVImage;
+  int             m_WaitTime;
+  //vgui_shell_tableau_new            *m_GUI;
+  //vidl_shared_frame  *m_VIDLFrame;
+
 
 private:
   VXLViewer(const Self &);    //purposely not implemented
@@ -85,6 +88,8 @@ private:
   void InitImage(typename itk::Image<PixelType,2>::Pointer ITKImage);
 
   std::string       m_WindowName;
+  //int m_Width;
+  //int m_Height;
 
 };
 } // end namespace itk
