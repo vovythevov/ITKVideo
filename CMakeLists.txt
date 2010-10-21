@@ -9,6 +9,7 @@ set(itkVideoFilePipelineTest_SRCS itkVideoFilePipelineTest.cxx )
 set(itkVMotionTracker_SRCS itkMotionTrackerTest.cxx )
 set(itkVTransformDICOMToVideo_SRCS itkTransformDICOMToVideo.cxx )
 set(itkVideoFileReaderExample_SRCS itkVideoFileReaderExample.cxx )
+set(itkVideoViewerExample_SRCS itkVideoViewerExample.cxx )
 
 #Only for creating video examples and other stuff
 set(itkVideoDraft_SRCS  itkVideoDraft.cxx)
@@ -25,19 +26,22 @@ find_package (ITK REQUIRED)
 include( ${ITK_USE_FILE} )
 
 add_executable(itkFaceDetectionFilterTest ${openCVImageFilters_SRCS})
-target_link_libraries(itkFaceDetectionFilterTest ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl) 
+target_link_libraries(itkFaceDetectionFilterTest ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl vgui) 
 
 add_executable(itkVideoFilePipelineTest ${itkVideoFilePipelineTest_SRCS})
-target_link_libraries(itkVideoFilePipelineTest ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl)
+target_link_libraries(itkVideoFilePipelineTest ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl vgui)
 
 add_executable(itkMotionTrackerTest ${itkVMotionTracker_SRCS})
-target_link_libraries(itkMotionTrackerTest ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl) 
+target_link_libraries(itkMotionTrackerTest ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl vgui) 
 
 add_executable(itkTransformDICOMToVideo ${itkVTransformDICOMToVideo_SRCS})
-target_link_libraries(itkTransformDICOMToVideo ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl)
+target_link_libraries(itkTransformDICOMToVideo ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl vgui)
 
 add_executable(itkVideoFileReaderExample ${itkVideoFileReaderExample_SRCS})
-target_link_libraries(itkVideoFileReaderExample ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl)
+target_link_libraries(itkVideoFileReaderExample ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl vgui)
+
+add_executable(itkVideoViewerExample ${itkVideoViewerExample_SRCS})
+target_link_libraries(itkVideoViewerExample ${ITK_LIBRARIES} ${OpenCV_LIBS} vidl vgui)
 
 #Motion tracker :
 add_test (ITKVideoTestMotion itkMotionTrackerTest 
