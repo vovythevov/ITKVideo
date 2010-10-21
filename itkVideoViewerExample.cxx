@@ -32,6 +32,7 @@ int main (int argv, char **argc)
       std::cerr<<e.GetLocation()<<std::endl;
       std::cerr<<e.GetNameOfClass()<<std::endl;
       std::cerr<<e.GetDescription()<<std::endl;
+      std::cin>>i;
       return EXIT_FAILURE;
       }
     if ( i == static_cast<int>(100) )
@@ -44,6 +45,6 @@ int main (int argv, char **argc)
       }
     reader->KeepReading();
     }
-
+  std::cin>>FrameTotal;
   return EXIT_SUCCESS;
 }
