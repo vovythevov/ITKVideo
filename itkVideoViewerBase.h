@@ -12,10 +12,20 @@ namespace itk
 /** \class VideoViewerBase
  * \brief Create a pop up window that display your video
  * 
- *  The purpose of this class is to enables devellopers to 
- *  display the video they are working on all along the 
- *  algorithm they are testing. 
- *  
+ *  Abstract base class for the viewer class. All viewer should 
+ *  inherits from this class and reimplement its method.
+ *    
+ *  The main goal of this class is to propose create an interface
+ *  between the iktVideoViewer which takes care of the pipeline
+ *  implementation of itk and the Viewer like itkOpenCVViewer or 
+ *  itkVXLViewer that are doing the actual displaying.
+ *  This way the itkVideoViewer can operate regardless the library
+ *  you want to use (as long as you use a least one...) and you can implement
+ *  your own Viewer that uses your own library.
+ *
+ *  \sa VideoViewer
+ *  \sa OpenCVViewer
+ *  \sa VXLViewer
  */
 
 template <class TImage>
@@ -23,18 +33,16 @@ class ITK_EXPORT VideoViewerBase : public LightProcessObject
 {
 public:
   /** Standard class typedefs. **/
-  typedef VideoViewerBase                               Self;
+  typedef VideoViewerBase                           Self;
   typedef LightProcessObject                        Superclass;
   typedef SmartPointer< Self >                      Pointer;
 
   /** Convinient typedef **/
-  typedef TImage                              ImageType;
-  typedef typename ImageType::PixelType       PixelType;
+  typedef TImage                                    ImageType;
+  typedef typename ImageType::PixelType             PixelType;
 
   /** Run-time type information (and related methods). **/
   itkTypeMacro(VideoViewerBase, Superclass);
-
-/** Set/Get the name of the file to be read. **/
 
   /** Try to open a windows **/
   /** Return true if in case of a success, false for a faillure **/
@@ -42,12 +50,8 @@ public:
   virtual bool Open (const char* WindowName) = 0;
 
   /** Try to close a viewer **/
- /** Return true if in case of a success, false for a faillure **/
-  /** Intended to be overloaded by subclasses **/
+  /** Return true if in case of a success, false for a faillure **/
   virtual bool Close (const char* WindowName) = 0;
-
- /** Return the state of the Viewer (opened or not) **/
-  virtual bool IsOpen () = 0;
 
  /** Display the input image **/
   virtual bool Play(typename itk::Image<PixelType,2>::Pointer ITKImage) = 0;
