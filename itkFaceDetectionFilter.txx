@@ -68,9 +68,10 @@ template< typename TInputImage >
 void FaceDetectionFilter< TInputImage >
 ::GenerateData()
 {
-
   // Get the input and output pointers
   InputImagePointer inputPtr = const_cast<InputImageType*>(this->GetInput());
+  //To make sure the data is here :
+  inputPtr->Update();
   
   //compute the pixel depth
   int depth = sizeof(ImagePixelType);
