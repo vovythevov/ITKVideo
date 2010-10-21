@@ -1,3 +1,19 @@
+/*=========================================================================
+
+  Program:   Insight Segmentation & Registration Toolkit
+  Module:    itkOpenCVViewer.h
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 
 #include "itkVideoViewerBase.h"
 #include "cv.h"
@@ -9,14 +25,29 @@
 namespace itk
 {
 
+/** \class OpenCVViewer
+ * \brief Base class for displaying images and wait 
+ *
+ *  The purpose of this class is to be used in others higher level
+ *  class for playing video or images. 
+ *  It is not intented to stand by itself. 
+ *  Consequently the implementation offers fairly simple ways to
+ *  display images.
+ * 
+ * \sa VideoViewerBase
+ * \sa VideoViewer
+ *
+ * \ingroup OpenCVFilters
+ */
+
 template <class TImage>
 class ITK_EXPORT OpenCVViewer : public VideoViewerBase<TImage>
 {
 public:
   /** Standard class typedefs. **/
-  typedef OpenCVViewer                               Self;
-  typedef LightProcessObject                        Superclass;
-  typedef SmartPointer< Self >                      Pointer;
+  typedef OpenCVViewer                        Self;
+  typedef LightProcessObject                  Superclass;
+  typedef SmartPointer< Self >                Pointer;
 
   /** Convinient typedef **/
   typedef TImage                              ImageType;
@@ -30,16 +61,11 @@ public:
 
   /** Try to open a windows **/
   /** Return true if in case of a success, false for a faillure **/
-  /** Intended to be overloaded by subclasses **/
   bool Open (const char *WindowName);
 
   /** Try to close a viewer **/
   /** Return true if in case of a success, false for a faillure **/
-  /** Intended to be overloaded by subclasses **/
   bool Close (const char *WindowName);
-
-  /** Return the state of the Viewer (opened or not) **/
-  bool IsOpen ();
 
  /** Display the input image **/
   bool Play (typename itk::Image<PixelType,2>::Pointer ITKImage);
@@ -58,15 +84,19 @@ protected:
   ~OpenCVViewer(){};
 
   void PrintSelf(std::ostream & os, Indent indent) const;
-  int            m_WaitTime;
-  IplImage          *m_OpenCVImage;
+
+  int                               m_WaitTime;
+  IplImage                          *m_OpenCVImage;
 
 private:
+
   OpenCVViewer(const Self &);    //purposely not implemented
   void operator=(const Self &); //purposely not implemented
-
+  
+  //Do the conversion from ITK image format to OpenCV Image format
+  // and put it in m_OpenCVImage
   void InitImage(typename itk::Image<PixelType,2>::Pointer ITKImage);
-
+  //Holds the name of the window
   std::string       m_WindowName;
 
 };

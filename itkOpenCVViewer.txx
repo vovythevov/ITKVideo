@@ -14,6 +14,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #if defined( _MSC_VER )
 #pragma warning ( disable : 4786 )
 #endif
@@ -27,6 +28,7 @@ template< typename TImage >
 OpenCVViewer< TImage >::OpenCVViewer()
 {
   this->m_WaitTime = 40; //One image every 40 ms, it makes 25 images/s.
+  //Security declaration, always better than to leave the variables "blank"
   this->m_OpenCVImage = 0;
   this->m_WindowName = "";
 }
@@ -40,7 +42,7 @@ bool OpenCVViewer< TImage >::Open (const char* WindowName)
     this->m_WindowName = WindowName;
     return true;
     }
-   
+  //if creation has failed
   itk::ExceptionObject e;
   e.SetDescription("Error while trying to create the window");
   e.SetLocation("itkOpenCVViewer");
@@ -57,27 +59,19 @@ bool OpenCVViewer< TImage >::Close (const char* WindowName)
     this->m_WindowName = "";
     return true;    
     }
-  return false;
-}
-
-
-template< typename TImage >
-bool OpenCVViewer< TImage >::IsOpen ()
-{
-  if (this->m_WindowName != "")
-    {
-    return true;
-    }
+  //if the destroying failed
   return false;
 }
 
 template< typename TImage >
 bool OpenCVViewer< TImage >::Play(typename itk::Image<PixelType,2>::Pointer ITKImage)
 {
-  this->InitImage(ITKImage);
-  //try to see if a player is opened or not :
+  //Deciding if we should display the image or not is done 
+  // at an higher level.
 
-  //If a winodw is opend, then play the video.
+  //Convert the image
+  this->InitImage(ITKImage);
+  //Display the video
   cvShowImage(this->m_WindowName.c_str(),this->m_OpenCVImage);
   return true;
 }
@@ -86,12 +80,15 @@ template< typename TImage >
 void OpenCVViewer< TImage >::Wait()
 {
   //we don't really care about the key for now
+  //Maybe we could int other implementation
   int key = cvWaitKey(this->m_WaitTime);
 }
 
 template< typename TImage >
 void OpenCVViewer< TImage >::Wait (int MSec)
 {
+  //we don't really care about the key for now
+  //Maybe we could int other implementation
   int key = cvWaitKey(MSec);
 }
 
@@ -104,6 +101,7 @@ void OpenCVViewer< TImage >::SetWaitTime(int MSec)
 template< typename TImage >
 void OpenCVViewer< TImage >::PrintSelf(std::ostream & os, Indent indent) const
 {
+  //Quite poor so far, we'll see later.
   Superclass::PrintSelf(os,indent);
   os<<indent<<"Wait time : "<<this->m_WaitTime<<std::endl;
 }
@@ -112,7 +110,7 @@ template <typename TImage>
 void OpenCVViewer< TImage >::
 InitImage(typename itk::Image<PixelType,2>::Pointer ITKImage)
 {
-    //compute the pixel depth
+  //compute the pixel depth
   int depth = sizeof(PixelType)*8;
   
   //Get the image in region
@@ -130,4 +128,4 @@ InitImage(typename itk::Image<PixelType,2>::Pointer ITKImage)
   cvSetData(this->m_OpenCVImage,const_cast<PixelType*>(ITKImage->GetBufferPointer()),CVSize.width);
 }
 
-}
+} //end namespace itk
