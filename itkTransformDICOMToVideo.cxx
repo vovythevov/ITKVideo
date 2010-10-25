@@ -15,7 +15,7 @@ int test_writer (std::string InputWhitoutExtension, std::string Output, bool wri
   itk::ImageFileReader< OutputImageType >::Pointer reader = itk::ImageFileReader< OutputImageType >::New();
 
   int i;
-  char* buf;
+  char* buf = new char;
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(reader->GetOutput());
@@ -56,12 +56,12 @@ int test_writer (std::string InputWhitoutExtension, std::string Output, bool wri
 
 int main (int argv, char **argc)
 {
-  /*int k = test_writer ("C:/projects/ITK-Vid-A2D2/Data/CTHeadAxialDicom/CTHead",
+  int k = test_writer ("C:/projects/ITK-Vid-A2D2/Data/CTHeadAxialDicom/CTHead",
     "C:/projects/ITK-Vid-A2D2_build/Testing/DicomImageAsAVideoWithOpenCV.avi",
     true,
     1,
     93);
   std::cin>>k;
-  return k;  */
+  return k;
   return test_writer(argc[1],argc[2],atoi(argc[3]),atoi(argc[4]),atoi(argc[5]));
 }

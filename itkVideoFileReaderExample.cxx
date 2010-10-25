@@ -18,7 +18,7 @@ int test_reader ( char* Input, char* OutputWithoutExtension, bool readerUseOpenC
   
   unsigned int FrameTotal = reader->GetFrameTotal();
   unsigned int i;
-  char* buf;
+  char* buf =  new char;
 
   itk::ImageFileWriter<OutputImageType>::Pointer writer = itk::ImageFileWriter<OutputImageType>::New();
   writer->SetInput(reader->GetOutput());
