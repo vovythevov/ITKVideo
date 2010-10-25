@@ -32,7 +32,7 @@ VideoReaderFactory <TImage>::CreateVideoReader( LIBRARY_USED lib )
 {
   RegisterBuiltInFactories();
 
-  VideoReaderBase<TImage>::Pointer ptr;
+  typename VideoReaderBase<TImage>::Pointer ptr;
   std::list< LightObject::Pointer > allobjects =
     ObjectFactoryBase::CreateAllInstance("itkVideoReaderBase");
   std::list< LightObject::Pointer >::iterator i;

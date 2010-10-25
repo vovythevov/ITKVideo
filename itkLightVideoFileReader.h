@@ -56,6 +56,7 @@ public:
   typedef Index<2> IndexType;
   typedef Size<2> SizeType;
   typedef ImageRegion<2> RegionType;
+  typedef VideoReaderBase<OutputImageType>                   InternalReaderType;
 
 
   /** Method for creation through the object factory. **/
@@ -102,8 +103,8 @@ protected:
   std::string                                                     m_FileName;
   bool                                                            m_VideoLoaded;      
   bool                                                            m_UseOpenCV;
-  typename itk::VideoReaderBase<typename OutputImageType>::Pointer    m_VideoReader;
-  typename SizeType             m_Size;
+  typename InternalReaderType::Pointer                            m_VideoReader;
+  SizeType                                                        m_Size;
   
 private:
   LightVideoFileReader(const Self &); //purposely not implemented
@@ -111,8 +112,8 @@ private:
 
   void TestFileExistanceAndReadability();
 
-  typename IndexType            m_Start; 
-  typename RegionType           m_Region;
+  IndexType            m_Start; 
+  RegionType           m_Region;
 };
 } // end namespace itk
 

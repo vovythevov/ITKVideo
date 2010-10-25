@@ -32,7 +32,7 @@ VideoViewerFactory <TImage>::CreateVideoViewer( LIBRARY_USED lib )
 {
   RegisterBuiltInFactories();
 
-  VideoViewerBase<TImage>::Pointer ptr;
+  typename VideoViewerBase<TImage>::Pointer ptr;
   std::list< LightObject::Pointer > allobjects =
     ObjectFactoryBase::CreateAllInstance("itkVideoViewerBase");
   std::list< LightObject::Pointer >::iterator i;
@@ -42,8 +42,8 @@ VideoViewerFactory <TImage>::CreateVideoViewer( LIBRARY_USED lib )
     {
     if ( count == lib )
       {
-        ptr = dynamic_cast< VideoViewerBase<TImage>* >(i->GetPointer());
-        if ( ptr.IsNotNull() )
+      ptr = dynamic_cast< VideoViewerBase<TImage>* >(i->GetPointer());
+        if ( ptr )
         {
         return ptr; 
         }

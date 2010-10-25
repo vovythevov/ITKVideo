@@ -24,9 +24,7 @@ public:
 
   /** Run-time type information (and related methods). **/
   itkTypeMacro(VideoReaderBase, Superclass);
-
-/** Set/Get the name of the file to be read. **/
-
+  
   /** Try to open a video **/
   /** Return true if in case of a success, false for a faillure **/
   /** Intended to be overloaded by subclasses **/
@@ -36,7 +34,7 @@ public:
   virtual bool IsReaderOpen () = 0;
 
  /** Return the image read form a video file **/
-  virtual typename itk::Image<typename PixelType,2>::Pointer Read() = 0;
+  virtual typename ImageType::Pointer Read() = 0;
 
   /** return true if you operation succesful **/
   virtual bool SetNextFrameToRead(unsigned long frameNumber) = 0;

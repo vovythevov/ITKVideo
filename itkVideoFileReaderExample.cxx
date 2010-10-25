@@ -16,9 +16,9 @@ int test_reader ( char* Input, char* OutputWithoutExtension, bool readerUseOpenC
   reader->UseOpenCV(readerUseOpenCV);
   reader->LoadVideo();
   
-  unsigned long FrameTotal = reader->GetFrameTotal();
-  unsigned long i;
-  char buf[2000];
+  unsigned int FrameTotal = reader->GetFrameTotal();
+  unsigned int i;
+  char* buf;
 
   itk::ImageFileWriter<OutputImageType>::Pointer writer = itk::ImageFileWriter<OutputImageType>::New();
   writer->SetInput(reader->GetOutput());
@@ -29,7 +29,8 @@ int test_reader ( char* Input, char* OutputWithoutExtension, bool readerUseOpenC
       {
       //To set a different filename each time
       std::string filename = OutputWithoutExtension;
-      filename += itoa(i,buf,10);
+      sprintf( buf, "%d", i );
+      filename += std::string(buf);
       filename += ".png";
       writer->SetFileName(filename.c_str());
       try

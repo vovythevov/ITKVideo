@@ -25,8 +25,10 @@ class ITK_EXPORT OpenCVReader : public VideoReaderBase < TImage >
 public:
   /** Standard class typedefs. **/
   typedef OpenCVReader                               Self;
-  typedef VideoReaderBase                        Superclass;
-  typedef SmartPointer< Self >                      Pointer;
+  typedef VideoReaderBase<TImage>                    Superclass;
+  typedef SmartPointer< Self >                       Pointer;
+  typedef TImage                                     ImageType;
+  typedef typename ImageType::PixelType              PixelType;
 
   /** Runtime type information (and related methods). **/
   itkTypeMacro(OpenCVReader, Superclass);
@@ -45,7 +47,7 @@ public:
   bool IsReaderOpen () {return this->m_ReaderOpen;};
 
   /** Return the image read form a video file **/
-  typename itk::Image<typename PixelType,2>::Pointer Read();
+  typename ImageType::Pointer Read();
 
   /** Set the next frame to read and return ture if operation succesfull **/
   bool SetNextFrameToRead( unsigned long frameNumber );

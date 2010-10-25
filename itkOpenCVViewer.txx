@@ -81,7 +81,7 @@ void OpenCVViewer< TImage >::Wait()
 {
   //we don't really care about the key for now
   //Maybe we could int other implementation
-  int key = cvWaitKey(this->m_WaitTime);
+  cvWaitKey(this->m_WaitTime);
 }
 
 template< typename TImage >
@@ -89,7 +89,7 @@ void OpenCVViewer< TImage >::Wait (int MSec)
 {
   //we don't really care about the key for now
   //Maybe we could int other implementation
-  int key = cvWaitKey(MSec);
+  cvWaitKey(MSec);
 }
 
 template< typename TImage >

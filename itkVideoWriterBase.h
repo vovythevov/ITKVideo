@@ -41,7 +41,7 @@ public:
   virtual bool IsWriterOpen () = 0;
 
  /** Write a frame and return true if succeed (false otherwise) **/
-  virtual bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage) = 0;
+  virtual bool Write (typename ImageType::Pointer ITKImage) = 0;
   /** A bunch of accessors**/
   virtual int GetWidth() = 0;
   virtual int GetHeight() = 0;

@@ -14,8 +14,8 @@ int test_writer (std::string InputWhitoutExtension, std::string Output, bool wri
   typedef itk::Image<unsigned char, 2>   OutputImageType;  
   itk::ImageFileReader< OutputImageType >::Pointer reader = itk::ImageFileReader< OutputImageType >::New();
 
-  unsigned long i;
-  char buf[2000];
+  int i;
+  char* buf;
 
   itk::VideoFileWriter<OutputImageType>::Pointer VideoWriter = itk::VideoFileWriter<OutputImageType>::New();
   VideoWriter->SetInput(reader->GetOutput());
@@ -26,7 +26,8 @@ int test_writer (std::string InputWhitoutExtension, std::string Output, bool wri
     {
     //To set a different filename each time
     std::string filename = InputWhitoutExtension;
-    filename += itoa(i,buf,10);
+    sprintf( buf, "%d", i );
+    filename += std::string(buf);
     filename += ".dcm";
     reader->SetFileName(filename.c_str()); 
     try

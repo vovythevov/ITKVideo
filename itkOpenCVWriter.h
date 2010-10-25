@@ -24,8 +24,10 @@ class ITK_EXPORT OpenCVWriter : public VideoWriterBase < TImage >
 public:
   /** Standard class typedefs. **/
   typedef OpenCVWriter                               Self;
-  typedef VideoWriterBase                        Superclass;
-  typedef SmartPointer< Self >                      Pointer;
+  typedef VideoWriterBase<TImage>                    Superclass;
+  typedef SmartPointer< Self >                       Pointer;
+  typedef TImage                                     ImageType;
+  typedef typename ImageType::PixelType              PixelType;
 
   /** Runtime type information (and related methods). **/
   itkTypeMacro(OpenCVWriter, Superclass);
@@ -45,7 +47,7 @@ public:
   bool IsWriterOpen () {return this->m_WriterOpen;};
 
   /** Write a frame and return true if succeed (false otherwise) **/
-  bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage);
+  bool Write (typename ImageType::Pointer ITKImage);
 
   /** A bunch of accessor **/
   int GetWidth() {return this->m_Width;};

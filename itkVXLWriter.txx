@@ -92,7 +92,7 @@ bool VXLWriter< TImage >
 
 template< typename TImage >
 bool VXLWriter < TImage >::Write
-(typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage)
+(typename ImageType::Pointer ITKImage)
 {
   if ( ! this->m_Writer->is_open() )
     {
@@ -107,7 +107,7 @@ bool VXLWriter < TImage >::Write
 
   vidl_pixel_format pixelFormat;
 
-  switch (sizeof(TImage::PixelType))
+  switch (sizeof(typename TImage::PixelType))
   {
   case 1 :
     pixelFormat = vidl_pixel_format_from_string("VIDL_PIXEL_FORMAT_MONO_1");
@@ -128,7 +128,7 @@ bool VXLWriter < TImage >::Write
     
   
   vidl_shared_frame  *VIDLFrame = new vidl_shared_frame(
-    const_cast<TImage::PixelType*>(ITKImage->GetBufferPointer()),
+    const_cast<PixelType*>(ITKImage->GetBufferPointer()),
     static_cast<unsigned int>(this->m_Size[0]),
     static_cast<unsigned int>(this->m_Size[1]),
     pixelFormat);

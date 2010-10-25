@@ -134,7 +134,7 @@ template< typename TInputImage >
 void VideoViewer< TInputImage>
 ::GenerateData()
 {
-  InputImagePointer inputPtr = const_cast<InputImageType *>(this->GetInput());
+  InputImageType* inputPtr = const_cast<InputImageType*>(this->GetInput());
   //To make sure the data is here :
   inputPtr->Update();
 

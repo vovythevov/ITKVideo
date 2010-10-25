@@ -76,9 +76,9 @@ void VideoFileWriter< TInputImage >
 ::GenerateData()
 {
     // Get the input pointer
-  TInputImage::Pointer inputPtr = static_cast< TInputImage * >
+  typename TInputImage::Pointer inputPtr = static_cast< TInputImage * >
          ( this->ProcessObject::GetInput(0) );
-  TInputImage::Pointer NewInput;
+  typename TInputImage::Pointer NewInput;
   
   //To make sure the data is here
   inputPtr->Update();

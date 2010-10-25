@@ -1,4 +1,4 @@
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkProcessObject.h"
 #include "itkVideoWriterBase.h"
 #include "itkImageToImageFilter.h"

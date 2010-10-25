@@ -69,7 +69,7 @@ void FaceDetectionFilter< TInputImage >
 ::GenerateData()
 {
   // Get the input and output pointers
-  InputImagePointer inputPtr = const_cast<InputImageType*>(this->GetInput());
+  typename TInputImage::Pointer inputPtr = const_cast<InputImageType*>(this->GetInput());
   //To make sure the data is here :
   inputPtr->Update();
   
@@ -93,7 +93,7 @@ void FaceDetectionFilter< TInputImage >
   //apply the algorithm
   this->DetectFaces(CVImage);
   
-  OutputImagePointer     outputPtr = this->GetOutput();
+  typename TInputImage::Pointer outputPtr = this->GetOutput();
 
   //Paste the input onto the output
   typename PasteImageFilter<InputImageType>::Pointer paste = PasteImageFilter<InputImageType>::New();  

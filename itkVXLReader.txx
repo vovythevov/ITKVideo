@@ -36,7 +36,7 @@ VXLReader< TImage >::VXLReader()
   this->m_Width = 0;
   this->m_Height = 0;
   
-  this->m_ImportFilter = typename ImportFilterType::New();
+  this->m_ImportFilter = ImportFilterType::New();
 }
 
 template< typename TImage >
@@ -123,7 +123,7 @@ bool VXLReader< TImage >
 }
 
 template< typename TImage >
-typename itk::Image<typename TImage::PixelType,2>::Pointer
+typename VXLReader<TImage>::ImageType::Pointer
 VXLReader <TImage> :: Read()
 {
   if ( this->m_Reader == NULL )
@@ -170,7 +170,7 @@ VXLReader <TImage> :: Read()
   
   this->UpdateProperties();
  
-  this->m_ImportFilter->SetImportPointer(reinterpret_cast<typename PixelType*>
+  this->m_ImportFilter->SetImportPointer(reinterpret_cast<PixelType*>
     (this->m_VIDLImage->data()),this->m_VIDLImage->size(),false );
   this->m_ImportFilter->Update();
 

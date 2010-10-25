@@ -74,7 +74,7 @@ bool OpenCVWriter< TImage >
 ::OpenWriter(const char* filename, typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage)
 {
   //compute the pixel depth
-  int depth = sizeof(TImage::PixelType)*8;
+  int depth = sizeof(typename TImage::PixelType)*8;
   
   //Get the image in region
   this->m_Region = ITKImage->GetLargestPossibleRegion();
@@ -109,7 +109,7 @@ bool OpenCVWriter< TImage >
 
 template< typename TImage >
 bool OpenCVWriter< TImage >::Write
-(typename itk::Image<typename TImage::PixelType,2>::Pointer ITKImage)
+(typename ImageType::Pointer ITKImage)
 {
   if ( this->m_Writer == NULL )
     {
@@ -121,7 +121,7 @@ bool OpenCVWriter< TImage >::Write
   
    //Retrieve the data so we don't reload the data
   //We instead use the same buffer ( same buffer -> same image )
-  cvSetData(this->m_Temp,const_cast<TImage::PixelType*>(ITKImage->GetBufferPointer()),this->m_Temp->widthStep);
+  cvSetData(this->m_Temp,const_cast<PixelType*>(ITKImage->GetBufferPointer()),this->m_Temp->widthStep);
 
   //We need to convert it to a RGB image
   cvCvtColor(this->m_Temp, this->m_CVImage, CV_GRAY2RGB);

@@ -37,7 +37,7 @@ OpenCVReader< TImage >::OpenCVReader()
   this->m_Height = 0;
   this->m_FourCC = 0;
   
-  this->m_ImportFilter = typename ImportFilterType::New();
+  this->m_ImportFilter = ImportFilterType::New();
 }
 
 template< typename TImage >
@@ -90,8 +90,8 @@ bool OpenCVReader< TImage >::OpenReader(const char* filename)
 }
 
 template< typename TImage >
-typename itk::Image<typename TImage::PixelType,2>::Pointer
-OpenCVReader <TImage> :: Read()
+typename OpenCVReader<TImage>::ImageType::Pointer
+OpenCVReader<TImage> :: Read()
 {
   if ( this->m_Capture == NULL || this->m_CVImage == NULL )
     {
@@ -144,7 +144,7 @@ OpenCVReader <TImage> :: Read()
   //CV_RGB2GRAY: convert RGB image to grayscale 
   cvCvtColor(this->m_Temp,this->m_CVImage, CV_RGB2GRAY );
  
-  this->m_ImportFilter->SetImportPointer(reinterpret_cast<typename PixelType*>
+  this->m_ImportFilter->SetImportPointer(reinterpret_cast<PixelType*>
     (this->m_CVImage->imageData),this->m_CVImage->imageSize,false );
   this->m_ImportFilter->Update();
   

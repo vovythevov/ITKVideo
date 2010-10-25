@@ -24,8 +24,10 @@ class ITK_EXPORT VXLReader : public VideoReaderBase < TImage >
 public:
   /** Standard class typedefs. **/
   typedef VXLReader                               Self;
-  typedef VideoReaderBase                        Superclass;
-  typedef SmartPointer< Self >                Pointer;
+  typedef VideoReaderBase<TImage>                 Superclass;
+  typedef SmartPointer< Self >                    Pointer;
+  typedef TImage                                  ImageType;
+  typedef typename ImageType::PixelType           PixelType;
 
   /** Runtime type information (and related methods). **/
   itkTypeMacro(VXLReader, Superclass);
@@ -34,7 +36,7 @@ public:
   itkNewMacro(Self);
   
   /** Convinient typedef **/ 
-  typedef itk::ImportImageFilter<typename TImage::PixelType,2>   ImportFilterType;
+  typedef itk::ImportImageFilter<PixelType,2>   ImportFilterType;
 
   /** Try to open a video **/
   /** Return true if in case of a success, false for a faillure **/
@@ -44,7 +46,7 @@ public:
   bool IsReaderOpen () {return this->m_ReaderOpen;};
 
   /** Return the image read form a video file **/
-  typename itk::Image<typename PixelType,2>::Pointer Read();
+  typename ImageType::Pointer Read();
 
   /** Set the next frame to read and return ture if operation succesfull **/
   bool SetNextFrameToRead( unsigned long frameNumber );

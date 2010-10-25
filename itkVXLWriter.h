@@ -23,14 +23,15 @@ class ITK_EXPORT VXLWriter : public VideoWriterBase < TImage >
 public:
   /** Standard class typedefs. **/
   typedef VXLWriter                              Self;
-  typedef VideoWriterBase                        Superclass;
-  typedef SmartPointer< Self >                Pointer;
+  typedef VideoWriterBase<TImage>                Superclass;
+  typedef SmartPointer< Self >                   Pointer;
 
   /** Runtime type information (and related methods). **/
   itkTypeMacro(VXLWriter, Superclass);
 
   /** Convenient typedef **/
   typedef TImage ImageType;
+  typedef typename ImageType::PixelType          PixelType;
   
   /** Method for creation through the object factory. **/
   itkNewMacro(Self);
@@ -47,7 +48,7 @@ public:
   bool IsWriterOpen () {return this->m_WriterOpen;};
 
   /** Write a frame and return true if succeed (false otherwise) **/
-  bool Write (typename itk::Image<typename PixelType,2>::Pointer ITKImage);
+  bool Write (typename ImageType::Pointer ITKImage);
 
   /** A bunch of accessor **/
   int GetWidth() {return this->m_Width;};

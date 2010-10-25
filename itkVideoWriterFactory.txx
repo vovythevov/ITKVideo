@@ -32,7 +32,7 @@ VideoWriterFactory <TImage>::CreateVideoWriter( LIBRARY_USED lib )
 {
   RegisterBuiltInFactories();
 
-  VideoWriterBase<TImage>::Pointer ptr;
+  typename VideoWriterBase<TImage>::Pointer ptr;
   std::list< LightObject::Pointer > allobjects =
     ObjectFactoryBase::CreateAllInstance("itkVideoWriterBase");
   std::list< LightObject::Pointer >::iterator i;

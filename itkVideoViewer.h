@@ -15,7 +15,7 @@
 
 =========================================================================*/
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkProcessObject.h"
 #include "itkVideoViewerBase.h"
 #include "itkImageToImageFilter.h"
@@ -85,7 +85,8 @@ public:
   itkNewMacro(Self);
 
   /** Convinient typedef **/
-  typedef TInputImage InputImageType;
+  typedef TInputImage                             InputImageType;
+  typedef typename InputImageType::Pointer        InputImagePointer;
 
   /** Run-time type information (and related methods). **/
   itkTypeMacro(VideoViewer, ImageToImageFilter);
